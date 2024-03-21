@@ -27,88 +27,67 @@ class _AnswersScreenState extends State<AnswersScreen> {
         children: [
           Expanded(
             child: ListView.builder(
-              itemCount: questions.length,
+              itemCount: questions.length + 1, // +1 for the "Add Question" button
               itemBuilder: (context, index) {
-                return Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      Text('Question ${index + 1}'),
-                      TextField(
-                        decoration: InputDecoration(labelText: 'Question'),
-                        onChanged: (value) {
-                          questions[index]['question'] = value;
-                        },
-                      ),
-                      TextField(
-                        decoration: InputDecoration(labelText: 'Option 1'),
-                        onChanged: (value) {
-                          questions[index]['options'][0] = value;
-                        },
-                      ),
-                      TextField(
-                        decoration: InputDecoration(labelText: 'Option 2'),
-                        onChanged: (value) {
-                          questions[index]['options'][1] = value;
-                        },
-                      ),
-                      TextField(
-                        decoration: InputDecoration(labelText: 'Option 3'),
-                        onChanged: (value) {
-                          questions[index]['options'][2] = value;
-                        },
-                      ),
-                      TextField(
-                        decoration: InputDecoration(labelText: 'Option 4'),
-                        onChanged: (value) {
-                          questions[index]['options'][3] = value;
-                        },
-                      ),
-                      DropdownButtonFormField(
-                        value: questions[index]['correctAnswer'],
-                        items: [
-                          DropdownMenuItem(
-                            value: 0,
-                            child: Text('Option 1'),
-                          ),
-                          DropdownMenuItem(
-                            value: 1,
-                            child: Text('Option 2'),
-                          ),
-                          DropdownMenuItem(
-                            value: 2,
-                            child: Text('Option 3'),
-                          ),
-                          DropdownMenuItem(
-                            value: 3,
-                            child: Text('Option 4'),
-                          ),
-                        ],
-                        onChanged: (value) {
-                          setState(() {
-                            questions[index]['correctAnswer'] = value;
-                          });
-                        },
-                        decoration: InputDecoration(labelText: 'Correct Answer'),
-                      ),
-                    ],
-                  ),
-                );
+                if (index == questions.length) {
+                  // Add Question button
+                  return ElevatedButton(
+                    onPressed: () {
+                      setState(() {
+                        questions.add({
+                          'question': '',
+                          'options': ['', '', '', ''],
+                          'correctAnswer': 0,
+                        });
+                      });
+                    },
+                    child: Text('Add Question'),
+                  );
+                }
+                return buildQuestionWidget(index);
               },
             ),
           ),
-          ElevatedButton(
-            onPressed: () {
+        ],
+      ),
+    );
+  }
+
+  Widget buildQuestionWidget(int index) {
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Text('Question ${index + 1}'),
+          TextField(
+            decoration: InputDecoration(labelText: 'Question'),
+            onChanged: (value) {
+              questions[index]['question'] = value;
+            },
+          ),
+          for (int i = 0; i < 4; i++)
+            TextField(
+              decoration: InputDecoration(labelText: 'Option ${i + 1}'),
+              onChanged: (value) {
+                questions[index]['options'][i] = value;
+              },
+            ),
+          DropdownButtonFormField(
+            value: questions[index]['correctAnswer'],
+            items: [
+              for (int i = 0; i < 4; i++)
+                DropdownMenuItem(
+                  value: i,
+                  child: Text('Option ${i + 1}'),
+                ),
+            ],
+            onChanged: (value) {
               setState(() {
-                questions.add({
-                  'question': '',
-                  'options': ['', '', '', ''],
-                  'correctAnswer': 0,
-                });
+                questions[index]['correctAnswer'] = value;
               });
             },
-            child: Text('Save Answer'),
+            decoration: InputDecoration(labelText: 'Correct Answer'),
           ),
         ],
       ),
