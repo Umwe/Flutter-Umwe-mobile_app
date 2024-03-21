@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-
 import 'CreateAnswersScreen.dart';
 
 class CreateQuestionScreen extends StatefulWidget {
@@ -51,8 +50,7 @@ class _CreateQuestionScreenState extends State<CreateQuestionScreen> {
                   context,
                   MaterialPageRoute(
                     builder: (context) => AnswersScreen(
-                      quizName: widget.quizName,
-                      quizId: widget.quizId,
+
                     ),
                   ),
                 );

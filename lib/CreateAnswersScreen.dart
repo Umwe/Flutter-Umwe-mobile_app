@@ -1,96 +1,86 @@
 import 'package:flutter/material.dart';
-
+import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 class AnswersScreen extends StatefulWidget {
-  final String quizName;
-  final int quizId;
 
-  AnswersScreen({
-    required this.quizName,
-    required this.quizId,
-  });
+
 
   @override
   _AnswersScreenState createState() => _AnswersScreenState();
 }
 
 class _AnswersScreenState extends State<AnswersScreen> {
-  List<Map<String, dynamic>> questions = [];
+  final TextEditingController _optionAController = TextEditingController();
+  final TextEditingController _optionBController = TextEditingController();
+  final TextEditingController _optionCController = TextEditingController();
+  final TextEditingController _optionDController = TextEditingController();
+  String? _selectedOption;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Answers for ${widget.quizName}'),
+        title: Text('Answers Screen'),
       ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Expanded(
-            child: ListView.builder(
-              itemCount: questions.length + 1, // +1 for the "Add Question" button
-              itemBuilder: (context, index) {
-                if (index == questions.length) {
-                  // Add Question button
-                  return ElevatedButton(
-                    onPressed: () {
-                      setState(() {
-                        questions.add({
-                          'question': '',
-                          'options': ['', '', '', ''],
-                          'correctAnswer': 0,
-                        });
-                      });
-                    },
-                    child: Text('Add Question'),
-                  );
-                }
-                return buildQuestionWidget(index);
-              },
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget buildQuestionWidget(int index) {
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Text('Question ${index + 1}'),
-          TextField(
-            decoration: InputDecoration(labelText: 'Question'),
-            onChanged: (value) {
-              questions[index]['question'] = value;
-            },
-          ),
-          for (int i = 0; i < 4; i++)
+      body: Padding(
+        padding: EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
             TextField(
-              decoration: InputDecoration(labelText: 'Option ${i + 1}'),
-              onChanged: (value) {
-                questions[index]['options'][i] = value;
-              },
+              controller: _optionAController,
+              decoration: InputDecoration(labelText: 'Option A'),
             ),
-          DropdownButtonFormField(
-            value: questions[index]['correctAnswer'],
-            items: [
-              for (int i = 0; i < 4; i++)
-                DropdownMenuItem(
-                  value: i,
-                  child: Text('Option ${i + 1}'),
-                ),
-            ],
-            onChanged: (value) {
-              setState(() {
-                questions[index]['correctAnswer'] = value;
-              });
-            },
-            decoration: InputDecoration(labelText: 'Correct Answer'),
-          ),
-        ],
+            TextField(
+              controller: _optionBController,
+              decoration: InputDecoration(labelText: 'Option B'),
+            ),
+            TextField(
+              controller: _optionCController,
+              decoration: InputDecoration(labelText: 'Option C'),
+            ),
+            TextField(
+              controller: _optionDController,
+              decoration: InputDecoration(labelText: 'Option D'),
+            ),
+            DropdownButtonFormField<String>(
+              value: _selectedOption,
+              items: ['A', 'B', 'C', 'D'].map((String value) {
+                return DropdownMenuItem<String>(
+                  value: value,
+                  child: Text(value),
+                );
+              }).toList(),
+              onChanged: (String? newValue) {
+                setState(() {
+                  _selectedOption = newValue;
+                });
+              },
+              decoration: InputDecoration(labelText: 'Correct Option'),
+            ),
+            SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () {
+                // Add your save logic here
+                // For example, you can print the selected options
+                print('Option A: ${_optionAController.text}');
+                print('Option B: ${_optionBController.text}');
+                print('Option C: ${_optionCController.text}');
+                print('Option D: ${_optionDController.text}');
+                print('Correct Option: $_selectedOption');
+              },
+              child: Text('Save'),
+            ),
+          ],
+        ),
       ),
     );
   }
+}
+
+void main() {
+  runApp(MaterialApp(
+    home: AnswersScreen(),
+  ));
 }
