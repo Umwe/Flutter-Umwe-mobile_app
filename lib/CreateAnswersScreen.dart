@@ -4,9 +4,17 @@ import 'package:http/http.dart' as http;
 import 'ConfirmationScreen.dart';
 
 class AnswersScreen extends StatefulWidget {
-  final int questionId; // Add a field to store the question ID
+  final int questionId; // Field to store the question ID
+  final String quizName; // Field to store the quiz name
+  final int totalMarks; // Field to store the total marks
+  final int quizId; // Field to store the quiz ID
 
-  AnswersScreen({required this.questionId}); // Constructor to accept question ID
+  AnswersScreen({
+    required this.questionId,
+    required this.quizName,
+    required this.totalMarks,
+    required this.quizId,
+  }); // Constructor to accept these fields
 
   @override
   _AnswersScreenState createState() => _AnswersScreenState();
@@ -45,6 +53,9 @@ class _AnswersScreenState extends State<AnswersScreen> {
       'optionC': _optionCController.text,
       'optionD': _optionDController.text,
       'correctOptionIndex': _getCorrectOptionIndex(),
+      'quizName': widget.quizName, // Include quizName in the post data
+      'totalMarks': widget.totalMarks, // Include totalMarks in the post data
+      'quizId': widget.quizId, // Include quizId in the post data
     };
 
     // Send the HTTP POST request
@@ -63,7 +74,11 @@ class _AnswersScreenState extends State<AnswersScreen> {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-            builder: (context) => ConfirmationScreen(),
+            builder: (context) => ConfirmationScreen(
+              quizName: widget.quizName,
+              totalMarks: widget.totalMarks,
+              quizId: widget.quizId,
+            ),
           ),
         );
       } else {
@@ -103,37 +118,13 @@ class _AnswersScreenState extends State<AnswersScreen> {
               controller: _optionDController,
               decoration: InputDecoration(labelText: 'Option D'),
             ),
-            DropdownButtonFormField<String>(
-              value: _selectedOption,
-              items: ['A', 'B', 'C', 'D'].map((String value) {
-                return DropdownMenuItem<String>(
-                  value: value,
-                  child: Text(value),
-                );
-              }).toList(),
-              onChanged: (String? newValue) {
-                setState(() {
-                  _selectedOption = newValue;
-                });
-              },
-              decoration: InputDecoration(labelText: 'Correct Option'),
-            ),
-            SizedBox(height: 20),
             ElevatedButton(
               onPressed: _saveAnswer,
-              child: Text('Save'),
+              child: Text('Save Answer'),
             ),
           ],
         ),
       ),
     );
   }
-}
-
-
-
-void main() {
-  runApp(MaterialApp(
-    home: AnswersScreen(questionId: 123), // Pass the question ID here
-  ));
 }

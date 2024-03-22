@@ -52,6 +52,9 @@ class _CreateQuestionScreenState extends State<CreateQuestionScreen> {
                     MaterialPageRoute(
                       builder: (context) => AnswersScreen(
                         questionId: questionId,
+                        quizName: widget.quizName,
+                        totalMarks: widget.totalMarks,
+                        quizId: widget.quizId,
                       ),
                     ),
                   );
@@ -67,12 +70,14 @@ class _CreateQuestionScreenState extends State<CreateQuestionScreen> {
 
   Future<int?> saveQuestion() async {
     try {
+      Map<String, dynamic> quizData = {
+        'quizId': widget.quizId,
+      };
+
       Map<String, dynamic> questionData = {
         'questionText': _questionController.text,
         'marks': int.parse(_marksController.text),
-        'quiz': {
-          'quizId': widget.quizId,
-        },
+        'quiz': quizData,
       };
 
       final response = await http.post(
