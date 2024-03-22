@@ -25,21 +25,10 @@ class _AnswersScreenState extends State<AnswersScreen> {
   final TextEditingController _optionBController = TextEditingController();
   final TextEditingController _optionCController = TextEditingController();
   final TextEditingController _optionDController = TextEditingController();
-  String? _selectedOption;
+  int? _selectedOptionIndex;
 
   int _getCorrectOptionIndex() {
-    switch (_selectedOption) {
-      case 'A':
-        return 0;
-      case 'B':
-        return 1;
-      case 'C':
-        return 2;
-      case 'D':
-        return 3;
-      default:
-        return -1; // Invalid index, handle this case accordingly
-    }
+    return _selectedOptionIndex ?? -1; // Default to -1 if no option is selected
   }
 
   Future<void> _saveAnswer() async {
@@ -117,6 +106,48 @@ class _AnswersScreenState extends State<AnswersScreen> {
             TextField(
               controller: _optionDController,
               decoration: InputDecoration(labelText: 'Option D'),
+            ),
+            SizedBox(height: 16),
+            Text('Choose Correct Answer:'),
+            RadioListTile<int>(
+              title: Text('Option A'),
+              value: 0,
+              groupValue: _selectedOptionIndex,
+              onChanged: (int? value) {
+                setState(() {
+                  _selectedOptionIndex = value;
+                });
+              },
+            ),
+            RadioListTile<int>(
+              title: Text('Option B'),
+              value: 1,
+              groupValue: _selectedOptionIndex,
+              onChanged: (int? value) {
+                setState(() {
+                  _selectedOptionIndex = value;
+                });
+              },
+            ),
+            RadioListTile<int>(
+              title: Text('Option C'),
+              value: 2,
+              groupValue: _selectedOptionIndex,
+              onChanged: (int? value) {
+                setState(() {
+                  _selectedOptionIndex = value;
+                });
+              },
+            ),
+            RadioListTile<int>(
+              title: Text('Option D'),
+              value: 3,
+              groupValue: _selectedOptionIndex,
+              onChanged: (int? value) {
+                setState(() {
+                  _selectedOptionIndex = value;
+                });
+              },
             ),
             ElevatedButton(
               onPressed: _saveAnswer,
