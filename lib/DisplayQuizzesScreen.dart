@@ -32,6 +32,21 @@ class _DisplayQuizzesScreenState extends State<DisplayQuizzesScreen> {
     }
   }
 
+  Future<void> deleteQuiz(int quizId) async {
+    // Replace the URL with your API endpoint to delete a quiz
+    final Uri url = Uri.parse('http://10.152.3.231:8080/quiz/delete/$quizId');
+    final response = await http.delete(url);
+
+    if (response.statusCode == 200) {
+      // Quiz deleted successfully, update UI or show a message
+      setState(() {
+        quizzes.removeWhere((quiz) => quiz.quizId == quizId);
+      });
+    } else {
+      throw Exception('Failed to delete quiz');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -54,7 +69,7 @@ class _DisplayQuizzesScreenState extends State<DisplayQuizzesScreen> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   IconButton(
-                    icon: Icon(Icons.update, color: Colors.blue),
+                    icon: Icon(Icons.update, color: Colors.green),
                     onPressed: () {
                       // Add your update logic here
                     },
@@ -62,7 +77,32 @@ class _DisplayQuizzesScreenState extends State<DisplayQuizzesScreen> {
                   IconButton(
                     icon: Icon(Icons.delete, color: Colors.red),
                     onPressed: () {
-                      // Add your delete logic here
+                      // Show delete confirmation dialog
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: Text('Confirm Deletion'),
+                            content: Text('Are you sure you want to delete "${quizzes[index].quizName}"?'),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.pop(context); // Close the dialog
+                                },
+                                child: Text('Cancel'),
+                              ),
+                              TextButton(
+                                onPressed: () {
+                                  // Call delete function
+                                  deleteQuiz(quizzes[index].quizId);
+                                  Navigator.pop(context); // Close the dialog
+                                },
+                                child: Text('Delete'),
+                              ),
+                            ],
+                          );
+                        },
+                      );
                     },
                   ),
                 ],
