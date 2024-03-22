@@ -38,13 +38,35 @@ class _DisplayQuizzesScreenState extends State<DisplayQuizzesScreen> {
       appBar: AppBar(
         title: Text('Saved Quizzes'),
       ),
-      body: ListView.builder(
+      body: ListView.separated(
         itemCount: quizzes.length,
+        separatorBuilder: (BuildContext context, int index) => SizedBox(height: 8), // Add space between rows
         itemBuilder: (context, index) {
           return Container(
             color: Colors.lightBlueAccent, // Set background color here
             child: ListTile(
-              title: Text('${quizzes[index].quizName} / ${quizzes[index].totalMarks}'),
+              title: Text(
+                '${quizzes[index].quizName} / ${quizzes[index].totalMarks}',
+                style: TextStyle(fontSize: 16),
+              ),
+              subtitle: Text('ID: ${quizzes[index].quizId}', style: TextStyle(fontSize: 12)), // Display quizId as subtitle
+              trailing: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  IconButton(
+                    icon: Icon(Icons.update, color: Colors.blue),
+                    onPressed: () {
+                      // Add your update logic here
+                    },
+                  ),
+                  IconButton(
+                    icon: Icon(Icons.delete, color: Colors.red),
+                    onPressed: () {
+                      // Add your delete logic here
+                    },
+                  ),
+                ],
+              ),
             ),
           );
         },
@@ -54,13 +76,15 @@ class _DisplayQuizzesScreenState extends State<DisplayQuizzesScreen> {
 }
 
 class QuizData {
+  final int quizId;
   final String quizName;
   final int totalMarks;
 
-  QuizData({required this.quizName, required this.totalMarks});
+  QuizData({required this.quizId, required this.quizName, required this.totalMarks});
 
   factory QuizData.fromJson(Map<String, dynamic> json) {
     return QuizData(
+      quizId: json['quizId'],
       quizName: json['quizName'],
       totalMarks: json['totalMarks'],
     );
