@@ -2,6 +2,13 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
+void main() {
+  runApp(MaterialApp(
+    title: 'Quiz App',
+    home: DisplayQuizzesScreen(),
+  ));
+}
+
 class DisplayQuizzesScreen extends StatefulWidget {
   @override
   _DisplayQuizzesScreenState createState() => _DisplayQuizzesScreenState();
@@ -110,11 +117,4 @@ class QuizData {
       totalMarks: json['totalMarks'],
     );
   }
-}
-
-void main() {
-  runApp(MaterialApp(
-    title: 'Quiz App',
-    home: DisplayQuizzesScreen(),
-  ));
 }
