@@ -45,15 +45,17 @@ class _CreateQuestionScreenState extends State<CreateQuestionScreen> {
             ),
             ElevatedButton(
               onPressed: () async {
-                await saveQuestion();
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => AnswersScreen(
-
+                int? questionId = await saveQuestion();
+                if (questionId != null) {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => AnswersScreen(
+                        questionId: questionId,
+                      ),
                     ),
-                  ),
-                );
+                  );
+                }
               },
               child: Text('Add Question'),
             ),
@@ -63,7 +65,7 @@ class _CreateQuestionScreenState extends State<CreateQuestionScreen> {
     );
   }
 
-  Future<void> saveQuestion() async {
+  Future<int?> saveQuestion() async {
     try {
       Map<String, dynamic> questionData = {
         'questionText': _questionController.text,
@@ -85,6 +87,7 @@ class _CreateQuestionScreenState extends State<CreateQuestionScreen> {
         Map<String, dynamic> responseData = jsonDecode(response.body);
         int questionId = responseData['questionId'];
         print('Generated Question ID: $questionId');
+        return questionId;
       } else if (response.statusCode == 400) {
         throw Exception('Bad request: Invalid data sent to the server.');
       } else {
@@ -95,6 +98,4 @@ class _CreateQuestionScreenState extends State<CreateQuestionScreen> {
       throw Exception('Failed to save question: $e');
     }
   }
-
 }
-
