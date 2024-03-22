@@ -33,17 +33,22 @@ class _DisplayQuizzesScreenState extends State<DisplayQuizzesScreen> {
   }
 
   Future<void> deleteQuiz(int quizId) async {
-    // Replace the URL with your API endpoint to delete a quiz
-    final Uri url = Uri.parse('http://10.152.3.231:8080/quiz/delete/$quizId');
-    final response = await http.delete(url);
+    final Uri deleteUrl = Uri.parse('http://10.152.3.231:8080/quiz/delete/$quizId');
 
-    if (response.statusCode == 200) {
-      // Quiz deleted successfully, update UI or show a message
-      setState(() {
-        quizzes.removeWhere((quiz) => quiz.quizId == quizId);
-      });
-    } else {
-      throw Exception('Failed to delete quiz');
+    try {
+      final response = await http.delete(deleteUrl);
+
+      if (response.statusCode == 204) {
+        // If deletion is successful, update the quizzes list to reflect the change
+        setState(() {
+          quizzes.removeWhere((quiz) => quiz.quizId == quizId);
+        });
+      } else {
+        throw Exception('Failed to delete quiz');
+      }
+    } catch (e) {
+      print('Error deleting quiz: $e');
+      // Handle error or show an error message to the user
     }
   }
 
@@ -55,21 +60,21 @@ class _DisplayQuizzesScreenState extends State<DisplayQuizzesScreen> {
       ),
       body: ListView.separated(
         itemCount: quizzes.length,
-        separatorBuilder: (BuildContext context, int index) => SizedBox(height: 8), // Add space between rows
+        separatorBuilder: (BuildContext context, int index) => SizedBox(height: 8),
         itemBuilder: (context, index) {
           return Container(
-            color: Colors.lightBlueAccent, // Set background color here
+            color: Colors.lightBlueAccent,
             child: ListTile(
               title: Text(
                 '${quizzes[index].quizName} / ${quizzes[index].totalMarks}',
                 style: TextStyle(fontSize: 16),
               ),
-              subtitle: Text('ID: ${quizzes[index].quizId}', style: TextStyle(fontSize: 12)), // Display quizId as subtitle
+              subtitle: Text('ID: ${quizzes[index].quizId}', style: TextStyle(fontSize: 12)),
               trailing: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   IconButton(
-                    icon: Icon(Icons.update, color: Colors.green),
+                    icon: Icon(Icons.update, color: Colors.blue),
                     onPressed: () {
                       // Add your update logic here
                     },
@@ -77,32 +82,8 @@ class _DisplayQuizzesScreenState extends State<DisplayQuizzesScreen> {
                   IconButton(
                     icon: Icon(Icons.delete, color: Colors.red),
                     onPressed: () {
-                      // Show delete confirmation dialog
-                      showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return AlertDialog(
-                            title: Text('Confirm Deletion'),
-                            content: Text('Are you sure you want to delete "${quizzes[index].quizName}"?'),
-                            actions: [
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.pop(context); // Close the dialog
-                                },
-                                child: Text('Cancel'),
-                              ),
-                              TextButton(
-                                onPressed: () {
-                                  // Call delete function
-                                  deleteQuiz(quizzes[index].quizId);
-                                  Navigator.pop(context); // Close the dialog
-                                },
-                                child: Text('Delete'),
-                              ),
-                            ],
-                          );
-                        },
-                      );
+                      // Call deleteQuiz function when delete icon is clicked
+                      deleteQuiz(quizzes[index].quizId);
                     },
                   ),
                 ],
