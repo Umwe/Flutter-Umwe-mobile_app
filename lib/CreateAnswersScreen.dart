@@ -12,6 +12,7 @@ class AnswersScreen extends StatefulWidget {
 }
 
 class _AnswersScreenState extends State<AnswersScreen> {
+  final TextEditingController _answerTextController = TextEditingController();
   final TextEditingController _optionAController = TextEditingController();
   final TextEditingController _optionBController = TextEditingController();
   final TextEditingController _optionCController = TextEditingController();
@@ -44,6 +45,10 @@ class _AnswersScreenState extends State<AnswersScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
+            TextField(
+              controller: _answerTextController,
+              decoration: InputDecoration(labelText: 'Answer Text'),
+            ),
             TextField(
               controller: _optionAController,
               decoration: InputDecoration(labelText: 'Option A'),
@@ -80,7 +85,10 @@ class _AnswersScreenState extends State<AnswersScreen> {
               onPressed: () async {
                 // Prepare the data to send in the POST request
                 Map<String, dynamic> postData = {
-                  'question': widget.questionId,
+                  'question': {
+                    'questionId': widget.questionId,
+                  },
+                  'answerText': _answerTextController.text,
                   'optionA': _optionAController.text,
                   'optionB': _optionBController.text,
                   'optionC': _optionCController.text,
@@ -91,7 +99,7 @@ class _AnswersScreenState extends State<AnswersScreen> {
                 // Send the HTTP POST request
                 try {
                   final response = await http.post(
-                    Uri.parse('http://localhost:8080/answer/save'),
+                    Uri.parse('http://your_spring_controller_url/save'),
                     headers: <String, String>{
                       'Content-Type': 'application/json; charset=UTF-8',
                     },
