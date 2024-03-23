@@ -39,6 +39,33 @@ class _DisplayQuizzesScreenState extends State<DisplayQuizzesScreen> {
     }
   }
 
+  Future<void> deleteQuizConfirmation(BuildContext context, int quizId) async {
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Confirm Deletion'),
+          content: Text('Are you sure you want to delete this quiz?'),
+          actions: <Widget>[
+            TextButton(
+              child: Text('Cancel'),
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog
+              },
+            ),
+            TextButton(
+              child: Text('Delete'),
+              onPressed: () async {
+                Navigator.of(context).pop(); // Close the dialog
+                await deleteQuiz(quizId); // Proceed with the deletion
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   Future<void> deleteQuiz(int quizId) async {
     final Uri deleteUrl = Uri.parse('http://192.168.1.68:8080/quiz/delete/$quizId');
 
@@ -89,8 +116,8 @@ class _DisplayQuizzesScreenState extends State<DisplayQuizzesScreen> {
                   IconButton(
                     icon: Icon(Icons.delete, color: Colors.red),
                     onPressed: () {
-                      // Call deleteQuiz function when delete icon is clicked
-                      deleteQuiz(quizzes[index].quizId);
+                      // Show confirmation dialog when delete icon is clicked
+                      deleteQuizConfirmation(context, quizzes[index].quizId);
                     },
                   ),
                 ],
