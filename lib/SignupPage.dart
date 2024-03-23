@@ -1,10 +1,11 @@
+import 'dart:convert'; // Import dart:convert to use jsonEncode
 import 'package:flutter/material.dart';
-import 'loginPage.dart'; // Import your LoginPage file
 import 'package:http/http.dart' as http;
-import 'dart:convert'; // for handling JSON data
+import 'loginPage.dart'; // Import your LoginPage file
 
 
 class SignupPage extends StatelessWidget {
+
   final TextEditingController usernameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
@@ -87,13 +88,22 @@ class SignupPage extends StatelessWidget {
                   padding: const EdgeInsets.only(top: 3, left: 3),
                   child: ElevatedButton(
                     onPressed: () async {
-                      var url = Uri.parse("http:// 192.168.204.102:8080/user/save");
-                      var response = await http.post(url, body: {
+                      var url = Uri.parse("http://192.168.1.68:8080/user/save");
+
+                      // Convert user data to JSON format
+                      var userData = {
                         "username": usernameController.text,
                         "email": emailController.text,
                         "password": passwordController.text,
                         "role": "2", // Default role value
-                      });
+                      };
+                      var jsonData = jsonEncode(userData);
+
+                      var response = await http.post(
+                        url,
+                        headers: {"Content-Type": "application/json"},
+                        body: jsonData,
+                      );
 
                       if (response.statusCode == 201) {
                         // User created successfully
