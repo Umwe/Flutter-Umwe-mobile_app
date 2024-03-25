@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mobile_app_project/user_landing_screen.dart';
 import 'LoginPage.dart';
 import 'admin_landing_screen.dart';
 void main() {
@@ -17,7 +18,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: LoginPage(), // Change this line
+      home: UserLandingScreen(), // Provide userProfileName here
     );
   }
 

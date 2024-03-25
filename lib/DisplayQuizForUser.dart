@@ -25,7 +25,7 @@ class _DisplayQuizForUserState extends State<DisplayQuizForUser> {
 
   Future<void> fetchQuizzes() async {
     // Replace the URL with your API endpoint to fetch quizzes
-    final Uri url = Uri.parse('http://192.168.1.68:8080/quiz/listquiz');
+    final Uri url = Uri.parse('http://172.21.31.122:8080/quiz/listquiz');
     final response = await http.get(url);
 
     if (response.statusCode == 200) {
@@ -57,6 +57,15 @@ class _DisplayQuizForUserState extends State<DisplayQuizForUser> {
                 style: TextStyle(fontSize: 16),
               ),
               subtitle: Text('ID: ${quizzes[index].quizId}', style: TextStyle(fontSize: 12)),
+              trailing: ElevatedButton(
+                onPressed: () {
+                  // Handle button press here
+                  // For example, navigate to a quiz page
+                  // You can replace this with your own logic
+                  print('Take Quiz pressed for ID: ${quizzes[index].quizId}');
+                },
+                child: Text('Take Quiz'),
+              ),
             ),
           );
         },
