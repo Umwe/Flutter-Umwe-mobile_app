@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'TakeQuizScreen.dart';
 
 void main() {
   runApp(MaterialApp(
@@ -25,7 +26,7 @@ class _DisplayQuizForUserState extends State<DisplayQuizForUser> {
 
   Future<void> fetchQuizzes() async {
     // Replace the URL with your API endpoint to fetch quizzes
-    final Uri url = Uri.parse('http://172.21.31.122:8080/quiz/listquiz');
+    final Uri url = Uri.parse('http://192.168.62.102:8080/quiz/listquiz');
     final response = await http.get(url);
 
     if (response.statusCode == 200) {
@@ -60,9 +61,13 @@ class _DisplayQuizForUserState extends State<DisplayQuizForUser> {
               trailing: ElevatedButton(
                 onPressed: () {
                   // Handle button press here
-                  // For example, navigate to a quiz page
-                  // You can replace this with your own logic
-                  print('Take Quiz pressed for ID: ${quizzes[index].quizId}');
+                  // Navigate to TakeQuizScreen with quiz ID
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => TakeQuizScreen(quizId: quizzes[index].quizId),
+                    ),
+                  );
                 },
                 child: Text('Take Quiz'),
               ),
