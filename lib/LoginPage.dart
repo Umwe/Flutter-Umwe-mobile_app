@@ -83,7 +83,6 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     TextEditingController usernameController = TextEditingController();
     TextEditingController passwordController = TextEditingController();
-    bool isPasswordVisible = false; // Track password visibility
 
     return MaterialApp(
       debugShowCheckedModeBanner: false,
@@ -96,17 +95,8 @@ class _LoginPageState extends State<LoginPage> {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               _header(),
-              _inputField(
-                usernameController,
-                passwordController,
-                    () => _login(context, usernameController.text, passwordController.text),
-                isPasswordVisible,
-                    () {
-                  setState(() {
-                    isPasswordVisible = !isPasswordVisible;
-                  });
-                },
-              ),
+              _inputField(usernameController, passwordController,
+                      () => _login(context, usernameController.text, passwordController.text)),
               _forgotPassword(),
               _signup(context),
             ],
@@ -128,13 +118,8 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Widget _inputField(
-      TextEditingController usernameController,
-      TextEditingController passwordController,
-      void Function() onPressed,
-      bool isPasswordVisible,
-      VoidCallback togglePasswordVisibility,
-      ) {
+  Widget _inputField(TextEditingController usernameController,
+      TextEditingController passwordController, void Function() onPressed) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
@@ -163,15 +148,8 @@ class _LoginPageState extends State<LoginPage> {
             fillColor: Colors.purple.withOpacity(0.1),
             filled: true,
             prefixIcon: const Icon(Icons.password),
-            suffixIcon: GestureDetector(
-              onTap: togglePasswordVisibility,
-              child: Icon(
-                isPasswordVisible ? Icons.visibility : Icons.visibility_off,
-                color: Colors.grey,
-              ),
-            ),
           ),
-          obscureText: !isPasswordVisible, // Toggle password visibility
+          obscureText: true,
         ),
         const SizedBox(height: 10),
         ElevatedButton(
