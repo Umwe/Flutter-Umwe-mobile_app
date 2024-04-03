@@ -4,9 +4,9 @@ import 'DisplayQuizzesScreen.dart';
 import 'sidebar_menu.dart'; // Import your SidebarMenu widget
 
 class AdminLandingScreen extends StatelessWidget {
-  final String userProfileName; // User profile name obtained from session or sidebar
+  // final String userProfileName; // User profile name obtained from session or sidebar
 
-  AdminLandingScreen({required this.userProfileName});
+  // AdminLandingScreen({required this.userProfileName});
 
   // Placeholder callback functions for menu items
   void onHomePressed(BuildContext context) {
@@ -60,14 +60,14 @@ class AdminLandingScreen extends StatelessWidget {
         title: Text('Admin Dashboard'),
       ),
       drawer: SidebarMenu( // Add the SidebarMenu widget as the drawer
-        userProfileName: userProfileName, // Pass userProfileName from session/sidebar
+        // userProfileName: userProfileName, // Pass userProfileName from session/sidebar
         onHomePressed: () => onHomePressed(context), // Call placeholder function
         onAboutPressed: () => onAboutPressed(context), // Call placeholder function
         onContactPressed: () => onContactPressed(context), // Call placeholder function
         onGalleryPressed: () => onGalleryPressed(context), // Call placeholder function
         onMapPressed: () => onMapPressed(context), // Call placeholder function
         onSettingsPressed: () => onSettingsPressed(context), // Call placeholder function
-        onLogoutPressed: () => onLogoutPressed(context), // Call placeholder function
+        onLogoutPressed: () => onLogoutPressed(context), userProfileName: '', // Call placeholder function
       ),
       body: Padding(
         padding: EdgeInsets.all(10.0),

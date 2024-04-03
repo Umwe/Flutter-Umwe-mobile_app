@@ -57,7 +57,7 @@ class _TakeQuizScreenState extends State<TakeQuizScreen> {
   }
 
   Future<void> fetchQuestions() async {
-    final Uri url = Uri.parse('http://192.168.62.102:8080/question/list/${widget.quizId}');
+    final Uri url = Uri.parse('http://10.152.3.231:8080/question/list/${widget.quizId}');
     final response = await http.get(url);
 
     if (response.statusCode == 200) {
