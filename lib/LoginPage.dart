@@ -14,13 +14,15 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   bool _isLoading = false; // Track loading state
+  String? userId; // Store user ID
+  String? username; // Store username
 
   Future<void> _login(BuildContext context, String username, String password) async {
     setState(() {
       _isLoading = true; // Show loading indicator
     });
 
-    final url = Uri.parse('http://10.152.3.231:8080/login'); // Update with your API URL
+    final url = Uri.parse('http://192.168.1.80:8080/login'); // Update with your API URL
     final response = await http.post(
       url,
       body: jsonEncode({
@@ -40,14 +42,20 @@ class _LoginPageState extends State<LoginPage> {
       String redirectMessage = responseData['message'];
 
       if (redirectMessage == "Redirect to admin dashboard") {
+        // Update the redirection to pass user ID and username
+        userId = responseData['userId'];
+        username = responseData['username'];
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => AdminLandingScreen()),
+          MaterialPageRoute(builder: (context) => AdminLandingScreen(userId: userId, username: username)),
         );
       } else if (redirectMessage == "Redirect to user dashboard") {
+        // Update the redirection to pass user ID and username
+        userId = responseData['userId'];
+        username = responseData['username'];
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => UserLandingScreen()),
+          MaterialPageRoute(builder: (context) => UserLandingScreen(userId: userId, username: username)),
         );
       } else {
         _showErrorDialog("Invalid credentials");

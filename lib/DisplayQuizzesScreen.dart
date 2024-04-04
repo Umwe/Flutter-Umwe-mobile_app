@@ -25,7 +25,7 @@ class _DisplayQuizzesScreenState extends State<DisplayQuizzesScreen> {
 
   Future<void> fetchQuizzes() async {
     // Replace the URL with your API endpoint to fetch quizzes
-    final Uri url = Uri.parse('http://10.152.3.231:8080/quiz/listquiz');
+    final Uri url = Uri.parse('http://192.168.1.80:8080/quiz/listquiz');
     final response = await http.get(url);
 
     if (response.statusCode == 200) {
@@ -67,7 +67,7 @@ class _DisplayQuizzesScreenState extends State<DisplayQuizzesScreen> {
   }
 
   Future<void> deleteQuiz(int quizId) async {
-    final Uri deleteUrl = Uri.parse('http://10.152.3.231:8080/quiz/delete/$quizId');
+    final Uri deleteUrl = Uri.parse('http://192.168.1.80:8080/quiz/delete/$quizId');
 
     try {
       final response = await http.delete(deleteUrl);

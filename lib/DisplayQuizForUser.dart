@@ -26,7 +26,7 @@ class _DisplayQuizForUserState extends State<DisplayQuizForUser> {
 
   Future<void> fetchQuizzes() async {
     // Replace the URL with your API endpoint to fetch quizzes
-    final Uri url = Uri.parse('http://10.152.3.231:8080/quiz/listquiz');
+    final Uri url = Uri.parse('http://192.168.1.80:8080/quiz/listquiz');
     final response = await http.get(url);
 
     if (response.statusCode == 200) {
@@ -47,7 +47,7 @@ class _DisplayQuizForUserState extends State<DisplayQuizForUser> {
   }
 
   Future<void> fetchTotalQuestions(int quizId, int index) async {
-    final Uri url = Uri.parse('http://10.152.3.231:8080/quiz/totalQuestions/$quizId');
+    final Uri url = Uri.parse('http://192.168.1.80:8080/quiz/totalQuestions/$quizId');
     final response = await http.get(url);
 
     if (response.statusCode == 200) {

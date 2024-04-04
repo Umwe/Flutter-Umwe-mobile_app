@@ -9,6 +9,7 @@ class SidebarMenu extends StatelessWidget {
   final VoidCallback onMapPressed;
   final VoidCallback onSettingsPressed;
   final VoidCallback onLogoutPressed;
+  final VoidCallback onDashboardPressed;
 
   const SidebarMenu({
     Key? key,
@@ -20,6 +21,7 @@ class SidebarMenu extends StatelessWidget {
     required this.onMapPressed,
     required this.onSettingsPressed,
     required this.onLogoutPressed,
+    required this.onDashboardPressed,
   }) : super(key: key);
 
   @override
@@ -41,8 +43,18 @@ class SidebarMenu extends StatelessWidget {
             ),
           ),
           ListTile(
+            title: Text('Dashboard'),
+            onTap: (){
+          Navigator.pushReplacementNamed(context, '/dashboard');
+          }
+
+
+          ),
+          ListTile(
             title: Text('Home'),
-            onTap: onHomePressed,
+            onTap: () {
+              Navigator.pushReplacementNamed(context, '/adminLandingScreen');
+            },
           ),
           ListTile(
             title: Text('About'),
@@ -67,7 +79,9 @@ class SidebarMenu extends StatelessWidget {
           ),
           ListTile(
             title: Text('Logout'),
-            onTap: onLogoutPressed,
+            onTap: () {
+              Navigator.pushReplacementNamed(context, '/');
+            },
           ),
         ],
       ),

@@ -88,7 +88,7 @@ class SignupPage extends StatelessWidget {
                   padding: const EdgeInsets.only(top: 3, left: 3),
                   child: ElevatedButton(
                     onPressed: () async {
-                      var url = Uri.parse("http://10.152.3.231:8080/user/save");
+                      var url = Uri.parse("http://192.168.1.80:8080/user/save");
 
                       // Convert user data to JSON format
                       var userData = {

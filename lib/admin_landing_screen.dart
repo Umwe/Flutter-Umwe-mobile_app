@@ -4,9 +4,10 @@ import 'DisplayQuizzesScreen.dart';
 import 'sidebar_menu.dart'; // Import your SidebarMenu widget
 
 class AdminLandingScreen extends StatelessWidget {
-  // final String userProfileName; // User profile name obtained from session or sidebar
+  final String? userId;
+  final String? username;
 
-  // AdminLandingScreen({required this.userProfileName});
+  const AdminLandingScreen({Key? key, this.userId, this.username}) : super(key: key);
 
   // Placeholder callback functions for menu items
   void onHomePressed(BuildContext context) {
@@ -51,23 +52,33 @@ class AdminLandingScreen extends StatelessWidget {
     // Add your logic here, such as logging out the user
   }
 
+  void onDashboardPressed(BuildContext context) {
+    // Implement logic for Dashboard button pressed
+    Navigator.pop(context); // Close the drawer if needed
+    // Add your logic here, such as navigating to the dashboard page
+  }
+
   @override
   Widget build(BuildContext context) {
+    print('User ID: $userId');
+    print('Username: $username');
+
     double buttonSize = MediaQuery.of(context).size.width * 0.45;
 
     return Scaffold(
       appBar: AppBar(
         title: Text('Admin Dashboard'),
       ),
-      drawer: SidebarMenu( // Add the SidebarMenu widget as the drawer
-        // userProfileName: userProfileName, // Pass userProfileName from session/sidebar
-        onHomePressed: () => onHomePressed(context), // Call placeholder function
-        onAboutPressed: () => onAboutPressed(context), // Call placeholder function
-        onContactPressed: () => onContactPressed(context), // Call placeholder function
-        onGalleryPressed: () => onGalleryPressed(context), // Call placeholder function
-        onMapPressed: () => onMapPressed(context), // Call placeholder function
-        onSettingsPressed: () => onSettingsPressed(context), // Call placeholder function
-        onLogoutPressed: () => onLogoutPressed(context), userProfileName: '', // Call placeholder function
+      drawer: SidebarMenu(
+        userProfileName: 'John Doe', // Example profile name
+        onHomePressed: () => onHomePressed(context),
+        onAboutPressed: () => onAboutPressed(context),
+        onContactPressed: () => onContactPressed(context),
+        onGalleryPressed: () => onGalleryPressed(context),
+        onMapPressed: () => onMapPressed(context),
+        onSettingsPressed: () => onSettingsPressed(context),
+        onLogoutPressed: () => onLogoutPressed(context),
+        onDashboardPressed: () => onDashboardPressed(context), // Pass the callback
       ),
       body: Padding(
         padding: EdgeInsets.all(10.0),

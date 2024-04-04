@@ -3,8 +3,12 @@ import 'package:flutter/material.dart';
 import 'DisplayQuizForUser.dart';
 import 'QuizResultsScreen.dart';
 
-
 class UserLandingScreen extends StatelessWidget {
+  final String? userId;
+  final String? username;
+
+  const UserLandingScreen({Key? key, this.userId, this.username}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     double buttonSize = MediaQuery.of(context).size.width * 0.45;
@@ -48,7 +52,7 @@ class UserLandingScreen extends StatelessWidget {
                     child: Padding(
                       padding: const EdgeInsets.all(16.0),
                       child: Text(
-                        'Browse availabe Quiz',
+                        'Browse available Quiz',
                         style: TextStyle(color: Colors.white, fontSize: 20.0),
                       ),
                     ),
@@ -88,7 +92,6 @@ class UserLandingScreen extends StatelessWidget {
                     ),
                   ),
                 ),
-
               ],
             ),
             SizedBox(height: 16), // Add spacing between rows
