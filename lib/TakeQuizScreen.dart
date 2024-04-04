@@ -77,9 +77,42 @@ class _TakeQuizScreenState extends State<TakeQuizScreen> {
       } else {
         throw Exception('Invalid data format for questions');
       }
+
+      // Fetch answers for each question using their IDs
+      await fetchAnswersForQuestions();
     } else {
       throw Exception('Failed to fetch questions');
     }
+  }
+
+  Future<void> fetchAnswersForQuestions() async {
+    for (var question in questions) {
+      final Uri answerUrl = Uri.parse('http://10.152.3.231:8080/answer/listbyquestion/${question.questionId}');
+      final answerResponse = await http.get(answerUrl);
+
+      if (answerResponse.statusCode == 200) {
+        dynamic answerData = jsonDecode(answerResponse.body);
+
+        if (answerData is List) {
+          // Find the answer object corresponding to the current question ID
+          var matchingAnswer = answerData.firstWhere((answer) => answer['question']['questionId'] == question.questionId, orElse: () => null);
+
+          if (matchingAnswer != null) {
+            // Create an Answer object with all options
+            question.answers = [Answer.fromJson(matchingAnswer)];
+          } else {
+            throw Exception('Answer not found for question ID: ${question.questionId}');
+          }
+        } else {
+          throw Exception('Invalid data format for answers');
+        }
+      } else {
+        throw Exception('Failed to fetch answers for question ID: ${question.questionId}');
+      }
+    }
+
+    // Set state after fetching all answers
+    setState(() {});
   }
 
   void submitQuiz() {
@@ -122,18 +155,58 @@ class _TakeQuizScreenState extends State<TakeQuizScreen> {
             style: TextStyle(fontSize: 18),
           ),
           SizedBox(height: 16),
-          ...questions[currentQuestionIndex].options.map((option) {
-            return RadioListTile(
-              title: Text(option),
-              value: option,
-              groupValue: questions[currentQuestionIndex].selectedAnswer,
-              onChanged: (value) {
-                setState(() {
-                  questions[currentQuestionIndex].selectedAnswer = value.toString();
-                });
-              },
-            );
-          }),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              ...questions[currentQuestionIndex].answers.map((answer) {
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    RadioListTile(
+                      title: Text(answer.optionA),
+                      value: answer.optionA,
+                      groupValue: questions[currentQuestionIndex].selectedAnswer,
+                      onChanged: (value) {
+                        setState(() {
+                          questions[currentQuestionIndex].selectedAnswer = value.toString();
+                        });
+                      },
+                    ),
+                    RadioListTile(
+                      title: Text(answer.optionB),
+                      value: answer.optionB,
+                      groupValue: questions[currentQuestionIndex].selectedAnswer,
+                      onChanged: (value) {
+                        setState(() {
+                          questions[currentQuestionIndex].selectedAnswer = value.toString();
+                        });
+                      },
+                    ),
+                    RadioListTile(
+                      title: Text(answer.optionC),
+                      value: answer.optionC,
+                      groupValue: questions[currentQuestionIndex].selectedAnswer,
+                      onChanged: (value) {
+                        setState(() {
+                          questions[currentQuestionIndex].selectedAnswer = value.toString();
+                        });
+                      },
+                    ),
+                    RadioListTile(
+                      title: Text(answer.optionD),
+                      value: answer.optionD,
+                      groupValue: questions[currentQuestionIndex].selectedAnswer,
+                      onChanged: (value) {
+                        setState(() {
+                          questions[currentQuestionIndex].selectedAnswer = value.toString();
+                        });
+                      },
+                    ),
+                  ],
+                );
+              }),
+            ],
+          ),
           SizedBox(height: 16),
           ElevatedButton(
             onPressed: nextQuestion,
@@ -151,6 +224,7 @@ class Question {
   final List<String> options;
   final int marks;
   String? selectedAnswer; // Track the selected answer
+  List<Answer> answers = []; // List to hold answers
 
   Question({
     required this.questionId,
@@ -166,6 +240,35 @@ class Question {
       questionText: json['questionText'],
       options: List<String>.from(json['options'] ?? []),
       marks: json['marks'],
+    );
+  }
+}
+
+class Answer {
+  final int answerId;
+  final String optionA;
+  final String optionB;
+  final String optionC;
+  final String optionD;
+  final int correctOptionIndex;
+
+  Answer({
+    required this.answerId,
+    required this.optionA,
+    required this.optionB,
+    required this.optionC,
+    required this.optionD,
+    required this.correctOptionIndex,
+  });
+
+  factory Answer.fromJson(Map<String, dynamic> json) {
+    return Answer(
+      answerId: json['answerId'],
+      optionA: json['optionA'],
+      optionB: json['optionB'],
+      optionC: json['optionC'],
+      optionD: json['optionD'],
+      correctOptionIndex: json['correctOptionIndex'],
     );
   }
 }
