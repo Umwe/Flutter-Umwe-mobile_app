@@ -1,45 +1,11 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-
-void main() {
-  runApp(MaterialApp(
-    title: 'Quiz App',
-    home: DisplayQuizForUser(),
-  ));
-}
-
-class DisplayQuizForUser extends StatefulWidget {
-  @override
-  _DisplayQuizForUserState createState() => _DisplayQuizForUserState();
-}
-
-class _DisplayQuizForUserState extends State<DisplayQuizForUser> {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Saved Quizzes'),
-      ),
-      body: Center(
-        child: ElevatedButton(
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => TakeQuizScreen(quizId: 1), // Pass quiz ID here
-              ),
-            );
-          },
-          child: Text('Take Quiz'),
-        ),
-      ),
-    );
-  }
-}
+import 'submittedquiz.dart'; // Import the SubmittedQuizScreen
 
 class TakeQuizScreen extends StatefulWidget {
   final int quizId;
+
 
   const TakeQuizScreen({Key? key, required this.quizId}) : super(key: key);
 
@@ -50,6 +16,7 @@ class TakeQuizScreen extends StatefulWidget {
 class _TakeQuizScreenState extends State<TakeQuizScreen> {
   List<Question> questions = []; // Define a list to hold questions
   int currentQuestionIndex = 0; // Track the index of the current question
+  int totalMarks = 0; // Track total marks
 
   @override
   void initState() {
@@ -116,8 +83,22 @@ class _TakeQuizScreenState extends State<TakeQuizScreen> {
   }
 
   void submitQuiz() {
-    // Implement logic to submit the quiz (calculate score, etc.)
-    // You can navigate to a result screen or perform other actions here
+    int marksObtained = 0;
+    for (var question in questions) {
+      if (question.selectedAnswer != null) {
+        if (question.selectedAnswer == question.answers[0].optionC) {
+          marksObtained += question.marks;
+        }
+      }
+    }
+
+    // Navigate to SubmittedQuizScreen and pass the total marks as a parameter
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => SubmittedQuizScreen(totalMarks: marksObtained),
+      ),
+    );
   }
 
   void nextQuestion() {
@@ -212,6 +193,8 @@ class _TakeQuizScreenState extends State<TakeQuizScreen> {
             onPressed: nextQuestion,
             child: Text(currentQuestionIndex < questions.length - 1 ? 'Next Question' : 'Submit Quiz'),
           ),
+          SizedBox(height: 16),
+          totalMarks != 0 ? Text('Total Marks: $totalMarks') : Container(),
         ],
       ),
     );
