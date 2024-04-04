@@ -35,12 +35,31 @@ class _DisplayQuizForUserState extends State<DisplayQuizForUser> {
       setState(() {
         quizzes = data.map((item) => QuizData.fromJson(item)).toList();
       });
+      // Fetch total questions for each quiz
+      for (int i = 0; i < quizzes.length; i++) {
+        await fetchTotalQuestions(quizzes[i].quizId, i);
+      }
     } else {
       print('HTTP Error: ${response.statusCode}');
       print('Response Body: ${response.body}');
       throw Exception('Failed to fetch quizzes');
     }
+  }
 
+  Future<void> fetchTotalQuestions(int quizId, int index) async {
+    final Uri url = Uri.parse('http://10.152.3.231:8080/quiz/totalQuestions/$quizId');
+    final response = await http.get(url);
+
+    if (response.statusCode == 200) {
+      int totalQuestions = int.parse(response.body);
+      setState(() {
+        quizzes[index].totalQuestions = totalQuestions;
+      });
+    } else {
+      print('HTTP Error: ${response.statusCode}');
+      print('Response Body: ${response.body}');
+      throw Exception('Failed to fetch total questions for quiz $quizId');
+    }
   }
 
   @override
@@ -60,7 +79,13 @@ class _DisplayQuizForUserState extends State<DisplayQuizForUser> {
                 '${quizzes[index].quizName} / ${quizzes[index].totalMarks}',
                 style: TextStyle(fontSize: 16),
               ),
-              subtitle: Text('ID: ${quizzes[index].quizId}', style: TextStyle(fontSize: 12)),
+              subtitle: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('ID: ${quizzes[index].quizId}', style: TextStyle(fontSize: 12)),
+                  Text('Total Questions: ${quizzes[index].totalQuestions}', style: TextStyle(fontSize: 12)),
+                ],
+              ),
               trailing: ElevatedButton(
                 onPressed: () {
                   // Handle button press here
@@ -86,14 +111,16 @@ class QuizData {
   final int quizId;
   final String quizName;
   final int totalMarks;
+  int totalQuestions; // Updated to include totalQuestions field
 
-  QuizData({required this.quizId, required this.quizName, required this.totalMarks});
+  QuizData({required this.quizId, required this.quizName, required this.totalMarks, this.totalQuestions = 0});
 
   factory QuizData.fromJson(Map<String, dynamic> json) {
     return QuizData(
       quizId: json['quizId'],
       quizName: json['quizName'],
       totalMarks: json['totalMarks'],
+      totalQuestions: 0, // Initialize totalQuestions field
     );
   }
 }
