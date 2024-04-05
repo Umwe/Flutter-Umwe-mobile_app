@@ -17,7 +17,7 @@ class _SavedAnswersScreenState extends State<SavedAnswersScreen> {
   }
 
   Future<void> fetchSavedAnswers() async {
-    final Uri url = Uri.parse('http://192.168.1.80:8080/answer/listall');
+    final Uri url = Uri.parse('http://10.152.3.231:8080/answer/listall');
     final response = await http.get(url);
 
     if (response.statusCode == 200) {

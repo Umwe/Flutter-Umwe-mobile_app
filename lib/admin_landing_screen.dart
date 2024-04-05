@@ -1,14 +1,11 @@
 import 'package:flutter/material.dart';
 import 'CreateQuizScreen.dart';
 import 'DisplayQuizzesScreen.dart';
+import 'ScoreboardPage.dart';
+import 'UserInfo.dart';
 import 'sidebar_menu.dart'; // Import your SidebarMenu widget
 
 class AdminLandingScreen extends StatelessWidget {
-  final String? userId;
-  final String? username;
-
-  const AdminLandingScreen({Key? key, this.userId, this.username}) : super(key: key);
-
   // Placeholder callback functions for menu items
   void onHomePressed(BuildContext context) {
     // Implement logic for Home button pressed
@@ -60,9 +57,6 @@ class AdminLandingScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print('User ID: $userId');
-    print('Username: $username');
-
     double buttonSize = MediaQuery.of(context).size.width * 0.45;
 
     return Scaffold(
@@ -70,7 +64,7 @@ class AdminLandingScreen extends StatelessWidget {
         title: Text('Admin Dashboard'),
       ),
       drawer: SidebarMenu(
-        userProfileName: 'John Doe', // Example profile name
+        userProfileName: UserInfo().username ?? 'Admin', // Use UserInfo username or 'Guest' as fallback
         onHomePressed: () => onHomePressed(context),
         onAboutPressed: () => onAboutPressed(context),
         onContactPressed: () => onContactPressed(context),
@@ -78,8 +72,9 @@ class AdminLandingScreen extends StatelessWidget {
         onMapPressed: () => onMapPressed(context),
         onSettingsPressed: () => onSettingsPressed(context),
         onLogoutPressed: () => onLogoutPressed(context),
-        onDashboardPressed: () => onDashboardPressed(context), // Pass the callback
+        onDashboardPressed: () => onDashboardPressed(context),
       ),
+
       body: Padding(
         padding: EdgeInsets.all(10.0),
         child: Column(
@@ -168,7 +163,11 @@ class AdminLandingScreen extends StatelessWidget {
               ),
               child: ElevatedButton(
                 onPressed: () {
-                  // Add your logic for "Scoreboard" button
+                  // Navigate to ScoreboardPage when the button is pressed
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => ScoreboardPage()),
+                  );
                 },
                 style: ElevatedButton.styleFrom(
                   shape: RoundedRectangleBorder(

@@ -1,7 +1,9 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:mobile_app_project/user_landing_screen.dart';
+import 'UserInfo.dart';
+import 'user_landing_screen.dart'; // Import your UserLandingScreen widget
+import 'sidebar_menu_user.dart'; // Import your SidebarMenuUser widget
 
 class SubmittedQuizScreen extends StatefulWidget {
   final int totalMarks;
@@ -15,15 +17,20 @@ class SubmittedQuizScreen extends StatefulWidget {
 
 class _SubmittedQuizScreenState extends State<SubmittedQuizScreen> {
   int quizTotalMarks = 0; // Variable to hold quiz total marks
+  late String userId; // Updated to accept userId from UserInfo
+  late String username; // Updated to accept username from UserInfo
 
   @override
   void initState() {
     super.initState();
+    // Assign userId and username from UserInfo
+    userId = UserInfo().userId ?? '';
+    username = UserInfo().username ?? '';
     fetchQuizTotalMarks(); // Fetch quiz total marks when the screen initializes
   }
 
   Future<void> fetchQuizTotalMarks() async {
-    final Uri url = Uri.parse('http://192.168.1.80:8080/quiz/totalMarks/${widget.quizId}');
+    final Uri url = Uri.parse('http://10.152.3.231:8080/quiz/totalMarks/${widget.quizId}');
     final response = await http.get(url);
 
     if (response.statusCode == 200) {
@@ -41,11 +48,59 @@ class _SubmittedQuizScreenState extends State<SubmittedQuizScreen> {
     }
   }
 
+  Future<void> saveMarks() async {
+    final Uri saveUrl = Uri.parse('http://10.152.3.231:8080/scoreboards/save');
+    final Map<String, dynamic> postData = {
+      "quizId": widget.quizId,
+      "userId": UserInfo().userId ?? '',
+      "totalMarksObtained": '${widget.totalMarks}/$quizTotalMarks',
+    };
+
+    final response = await http.post(
+      saveUrl,
+      body: json.encode(postData),
+      headers: {'Content-Type': 'application/json'},
+    );
+
+    if (response.statusCode == 200) {
+      // Success message or action after saving to the database
+      print('Marks saved successfully!');
+    } else {
+      // Error handling
+      print('Failed to save marks. Status code: ${response.statusCode}');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('Submitted Quiz'),
+      ),
+      drawer: SidebarMenuUser(
+        userProfileName: username, // Use username from UserInfo
+        userId: userId, // Pass the userId to SidebarMenuUser
+        onHomePressed: () {
+          Navigator.pushReplacementNamed(context, '/UserLandingScreen');
+        },
+        onAboutPressed: () {
+          // Handle About press
+        },
+        onContactPressed: () {
+          // Handle Contact press
+        },
+        onGalleryPressed: () {
+          // Handle Gallery press
+        },
+        onMapPressed: () {
+          // Handle Map press
+        },
+        onSettingsPressed: () {
+          // Handle Settings press
+        },
+        onLogoutPressed: () {
+          Navigator.pushReplacementNamed(context, '/');
+        },
       ),
       body: Center(
         child: Column(
@@ -69,7 +124,8 @@ class _SubmittedQuizScreenState extends State<SubmittedQuizScreen> {
             ),
             SizedBox(height: 16),
             ElevatedButton(
-              onPressed: () {
+              onPressed: () async {
+                await saveMarks(); // Call the save function when the button is pressed
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(builder: (context) => UserLandingScreen()),
@@ -77,7 +133,6 @@ class _SubmittedQuizScreenState extends State<SubmittedQuizScreen> {
               },
               child: Text('Go Back Home'),
             ),
-
           ],
         ),
       ),

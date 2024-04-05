@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:mobile_app_project/user_landing_screen.dart';
 import 'SignupPage.dart';
+import 'UserInfo.dart';
 import 'admin_landing_screen.dart'; // Import the AdminLandingScreen widget
 
 class LoginPage extends StatefulWidget {
@@ -22,7 +23,7 @@ class _LoginPageState extends State<LoginPage> {
       _isLoading = true; // Show loading indicator
     });
 
-    final url = Uri.parse('http://192.168.1.80:8080/login'); // Update with your API URL
+    final url = Uri.parse('http://10.152.3.231:8080/login'); // Update with your API URL
     final response = await http.post(
       url,
       body: jsonEncode({
@@ -41,21 +42,20 @@ class _LoginPageState extends State<LoginPage> {
       final responseData = jsonDecode(response.body);
       String redirectMessage = responseData['message'];
 
-      if (redirectMessage == "Redirect to admin dashboard") {
-        // Update the redirection to pass user ID and username
-        userId = responseData['userId'];
+      if (redirectMessage == "Redirect to admin dashboard" || redirectMessage == "Redirect to user dashboard") {
+        userId = responseData['user_id'].toString(); // Use 'user_id' key
         username = responseData['username'];
+
+        // Set user details using UserInfo singleton
+        UserInfo().setUserDetails(userId!, username!);
+
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => AdminLandingScreen(userId: userId, username: username)),
-        );
-      } else if (redirectMessage == "Redirect to user dashboard") {
-        // Update the redirection to pass user ID and username
-        userId = responseData['userId'];
-        username = responseData['username'];
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => UserLandingScreen(userId: userId, username: username)),
+          MaterialPageRoute(
+            builder: (context) => redirectMessage == "Redirect to admin dashboard"
+                ? AdminLandingScreen()
+                : UserLandingScreen(),
+          ),
         );
       } else {
         _showErrorDialog("Invalid credentials");
@@ -103,8 +103,11 @@ class _LoginPageState extends State<LoginPage> {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               _header(),
-              _inputField(usernameController, passwordController,
-                      () => _login(context, usernameController.text, passwordController.text)),
+              _inputField(
+                usernameController,
+                passwordController,
+                    () => _login(context, usernameController.text, passwordController.text),
+              ),
               _forgotPassword(),
               _signup(context),
             ],
@@ -126,8 +129,11 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Widget _inputField(TextEditingController usernameController,
-      TextEditingController passwordController, void Function() onPressed) {
+  Widget _inputField(
+      TextEditingController usernameController,
+      TextEditingController passwordController,
+      void Function() onPressed,
+      ) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [

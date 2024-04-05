@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
-class SidebarMenu extends StatelessWidget {
+class SidebarMenuUser extends StatelessWidget {
   final String userProfileName;
+  final String userId; // Add user ID field
   final VoidCallback onHomePressed;
   final VoidCallback onAboutPressed;
   final VoidCallback onContactPressed;
@@ -9,11 +10,11 @@ class SidebarMenu extends StatelessWidget {
   final VoidCallback onMapPressed;
   final VoidCallback onSettingsPressed;
   final VoidCallback onLogoutPressed;
-  final VoidCallback onDashboardPressed;
 
-  const SidebarMenu({
+  const SidebarMenuUser({
     Key? key,
     required this.userProfileName,
+    required this.userId, // Initialize user ID in the constructor
     required this.onHomePressed,
     required this.onAboutPressed,
     required this.onContactPressed,
@@ -21,7 +22,6 @@ class SidebarMenu extends StatelessWidget {
     required this.onMapPressed,
     required this.onSettingsPressed,
     required this.onLogoutPressed,
-    required this.onDashboardPressed,
   }) : super(key: key);
 
   @override
@@ -34,24 +34,32 @@ class SidebarMenu extends StatelessWidget {
             decoration: BoxDecoration(
               color: Colors.blue,
             ),
-            child: Text(
-              'Welcome, $userProfileName',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 20,
-              ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  'Welcome, $userProfileName',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 20,
+                  ),
+                ),
+                SizedBox(height: 8),
+                Text(
+                  'User ID: $userId', // Display user ID in the DrawerHeader
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
+                  ),
+                ),
+              ],
             ),
-          ),
-          ListTile(
-            title: Text('Dashboard'),
-            onTap: () {
-              Navigator.pushReplacementNamed(context, '/dashboard');
-            },
           ),
           ListTile(
             title: Text('Home'),
             onTap: () {
-              Navigator.pushReplacementNamed(context, '/adminLandingScreen');
+              Navigator.pushReplacementNamed(context, '/UserLandingScreen');
             },
           ),
           ListTile(

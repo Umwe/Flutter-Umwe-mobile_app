@@ -1,21 +1,54 @@
 import 'package:flutter/material.dart';
-
+import 'UserInfo.dart'; // Import the UserInfo class from your app
+import 'sidebar_menu_user.dart';
 import 'DisplayQuizForUser.dart';
 import 'QuizResultsScreen.dart';
 
 class UserLandingScreen extends StatelessWidget {
-  final String? userId;
-  final String? username;
-
-  const UserLandingScreen({Key? key, this.userId, this.username}) : super(key: key);
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
+    String username = UserInfo().username ?? 'User'; // Get the username from UserInfo class
+    String userId = UserInfo().userId ?? ''; // Get the userId from UserInfo class
+
     double buttonSize = MediaQuery.of(context).size.width * 0.45;
 
     return Scaffold(
+      key: _scaffoldKey,
       appBar: AppBar(
         title: Text('User Dashboard'),
+        leading: IconButton(
+          icon: Icon(Icons.menu),
+          onPressed: () {
+            _scaffoldKey.currentState?.openDrawer();
+          },
+        ),
+      ),
+      drawer: SidebarMenuUser(
+        userProfileName: username, // Pass the username to SidebarMenuUser
+        userId: userId, // Pass the userId to SidebarMenuUser
+        onHomePressed: () {
+          Navigator.pushReplacementNamed(context, '/UserLandingScreen');
+        },
+        onAboutPressed: () {
+          // Add your about functionality here
+        },
+        onContactPressed: () {
+          // Add your contact functionality here
+        },
+        onGalleryPressed: () {
+          // Add your gallery functionality here
+        },
+        onMapPressed: () {
+          // Add your map functionality here
+        },
+        onSettingsPressed: () {
+          // Add your settings functionality here
+        },
+        onLogoutPressed: () {
+          Navigator.pushReplacementNamed(context, '/');
+        },
       ),
       body: Padding(
         padding: EdgeInsets.all(10.0),

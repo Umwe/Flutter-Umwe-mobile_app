@@ -48,7 +48,7 @@ class CreateQuizScreen extends StatelessWidget {
                     'totalMarks': marks,
                   };
 
-                  Uri url = Uri.parse('http://192.168.1.80:8080/quiz/savequiz');
+                  Uri url = Uri.parse('http://10.152.3.231:8080/quiz/savequiz');
                   final response = await http.post(
                     url,
                     body: jsonEncode(quizData),
