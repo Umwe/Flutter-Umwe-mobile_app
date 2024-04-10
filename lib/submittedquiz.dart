@@ -30,7 +30,7 @@ class _SubmittedQuizScreenState extends State<SubmittedQuizScreen> {
   }
 
   Future<void> fetchQuizTotalMarks() async {
-    final Uri url = Uri.parse('http://10.152.3.231:8080/quiz/totalMarks/${widget.quizId}');
+    final Uri url = Uri.parse('http://192.168.1.68:8080/quiz/totalMarks/${widget.quizId}');
     final response = await http.get(url);
 
     if (response.statusCode == 200) {
@@ -49,7 +49,7 @@ class _SubmittedQuizScreenState extends State<SubmittedQuizScreen> {
   }
 
   Future<void> saveMarks() async {
-    final Uri saveUrl = Uri.parse('http://10.152.3.231:8080/scoreboards/save');
+    final Uri saveUrl = Uri.parse('http://192.168.1.68:8080/scoreboards/save');
     final Map<String, dynamic> postData = {
       "quizId": widget.quizId,
       "userId": UserInfo().userId ?? '',

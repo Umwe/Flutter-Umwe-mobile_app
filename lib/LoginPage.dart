@@ -23,7 +23,7 @@ class _LoginPageState extends State<LoginPage> {
       _isLoading = true; // Show loading indicator
     });
 
-    final url = Uri.parse('http://10.152.3.231:8080/login'); // Update with your API URL
+    final url = Uri.parse('http://192.168.1.68:8080/login'); // Update with your API URL
     final response = await http.post(
       url,
       body: jsonEncode({
