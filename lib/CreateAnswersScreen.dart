@@ -50,7 +50,7 @@ class _AnswersScreenState extends State<AnswersScreen> {
     // Send the HTTP POST request
     try {
       final response = await http.post(
-        Uri.parse('http://192.168.137.1:8080/answer/save'),
+        Uri.parse('http://192.168.1.65:8080/answer/save'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },
