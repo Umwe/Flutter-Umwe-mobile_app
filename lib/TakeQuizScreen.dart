@@ -5,9 +5,9 @@ import 'submittedquiz.dart'; // Import the SubmittedQuizScreen
 
 class TakeQuizScreen extends StatefulWidget {
   final int quizId;
+  final String quizName; // Add the quizName parameter
 
-
-  const TakeQuizScreen({Key? key, required this.quizId}) : super(key: key);
+  const TakeQuizScreen({Key? key, required this.quizId, required this.quizName}) : super(key: key);
 
   @override
   _TakeQuizScreenState createState() => _TakeQuizScreenState();
@@ -92,12 +92,13 @@ class _TakeQuizScreenState extends State<TakeQuizScreen> {
       }
     }
 
-    // Navigate to SubmittedQuizScreen and pass the quizId and total marks as parameters
+    // Navigate to SubmittedQuizScreen and pass the quizId, quizName, and total marks as parameters
     Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) => SubmittedQuizScreen(
           quizId: widget.quizId, // Pass the quizId to the next screen
+          quizName: widget.quizName, // Pass the quizName to the next screen
           totalMarks: marksObtained,
         ),
       ),
@@ -121,7 +122,7 @@ class _TakeQuizScreenState extends State<TakeQuizScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Take Quiz'),
+        title: Text('Take Quiz - ${widget.quizName}'), // Display the quizName in the app bar
       ),
       body: questions.isEmpty
           ? Center(child: CircularProgressIndicator()) // Show loading indicator while fetching questions

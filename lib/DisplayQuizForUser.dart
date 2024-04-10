@@ -89,11 +89,14 @@ class _DisplayQuizForUserState extends State<DisplayQuizForUser> {
               trailing: ElevatedButton(
                 onPressed: () {
                   // Handle button press here
-                  // Navigate to TakeQuizScreen with quiz ID
+                  // Navigate to TakeQuizScreen with quiz ID and name
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => TakeQuizScreen(quizId: quizzes[index].quizId),
+                      builder: (context) => TakeQuizScreen(
+                        quizId: quizzes[index].quizId,
+                        quizName: quizzes[index].quizName,
+                      ),
                     ),
                   );
                 },

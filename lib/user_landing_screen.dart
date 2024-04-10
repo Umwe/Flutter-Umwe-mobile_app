@@ -10,7 +10,9 @@ class UserLandingScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     String username = UserInfo().username ?? 'User'; // Get the username from UserInfo class
+    String email = UserInfo().email ?? '';
     String userId = UserInfo().userId ?? ''; // Get the userId from UserInfo class
+
 
     double buttonSize = MediaQuery.of(context).size.width * 0.45;
 
@@ -27,6 +29,7 @@ class UserLandingScreen extends StatelessWidget {
       ),
       drawer: SidebarMenuUser(
         userProfileName: username, // Pass the username to SidebarMenuUser
+        userEmail: email,
         userId: userId, // Pass the userId to SidebarMenuUser
         onHomePressed: () {
           Navigator.pushReplacementNamed(context, '/UserLandingScreen');

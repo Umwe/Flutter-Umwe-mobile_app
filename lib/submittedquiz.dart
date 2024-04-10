@@ -8,8 +8,10 @@ import 'sidebar_menu_user.dart'; // Import your SidebarMenuUser widget
 class SubmittedQuizScreen extends StatefulWidget {
   final int totalMarks;
   final int quizId;
+  final String quizName; // Add the quizName parameter
 
-  const SubmittedQuizScreen({Key? key, required this.totalMarks, required this.quizId}) : super(key: key);
+  const SubmittedQuizScreen({Key? key, required this.totalMarks, required this.quizId, required this.quizName})
+      : super(key: key);
 
   @override
   _SubmittedQuizScreenState createState() => _SubmittedQuizScreenState();
@@ -19,6 +21,7 @@ class _SubmittedQuizScreenState extends State<SubmittedQuizScreen> {
   int quizTotalMarks = 0; // Variable to hold quiz total marks
   late String userId; // Updated to accept userId from UserInfo
   late String username; // Updated to accept username from UserInfo
+  late String email;
 
   @override
   void initState() {
@@ -26,6 +29,7 @@ class _SubmittedQuizScreenState extends State<SubmittedQuizScreen> {
     // Assign userId and username from UserInfo
     userId = UserInfo().userId ?? '';
     username = UserInfo().username ?? '';
+    email= UserInfo().email ?? '';
     fetchQuizTotalMarks(); // Fetch quiz total marks when the screen initializes
   }
 
@@ -52,7 +56,9 @@ class _SubmittedQuizScreenState extends State<SubmittedQuizScreen> {
     final Uri saveUrl = Uri.parse('http://192.168.1.65:8080/scoreboards/save');
     final Map<String, dynamic> postData = {
       "quizId": widget.quizId,
-      "userId": UserInfo().userId ?? '',
+      "quizName": widget.quizName,
+      "userid":UserInfo().userId ?? '',
+      "username": UserInfo().username ?? '',
       "totalMarksObtained": '${widget.totalMarks}/$quizTotalMarks',
     };
 
@@ -71,14 +77,25 @@ class _SubmittedQuizScreenState extends State<SubmittedQuizScreen> {
     }
   }
 
+  void viewAnswers() {
+    // Print the required fields to the console
+    print('quizId: ${widget.quizId}');
+    print('quizName: ${widget.quizName}');
+    print('userId: ${UserInfo().userId ?? ''}');
+    print('email: ${UserInfo().email ?? ''}');
+    print('username: ${UserInfo().username ?? ''}');
+    print('totalMarksObtained: ${widget.totalMarks}/$quizTotalMarks');
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Submitted Quiz'),
+        title: Text('Submitted Quiz - ${widget.quizName}'), // Display the quizName in the app bar title
       ),
       drawer: SidebarMenuUser(
         userProfileName: username, // Use username from UserInfo
+        userEmail:email,
         userId: userId, // Pass the userId to SidebarMenuUser
         onHomePressed: () {
           Navigator.pushReplacementNamed(context, '/UserLandingScreen');
@@ -118,7 +135,7 @@ class _SubmittedQuizScreenState extends State<SubmittedQuizScreen> {
             SizedBox(height: 24),
             ElevatedButton(
               onPressed: () {
-                // Handle view answers button press
+                viewAnswers(); // Call the function to view answers when the button is pressed
               },
               child: Text('View Answers'),
             ),

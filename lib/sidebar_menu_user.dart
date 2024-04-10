@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 
 class SidebarMenuUser extends StatelessWidget {
   final String userProfileName;
-  final String userId; // Add user ID field
+  final String userEmail; // Added user email field
+  final String userId;
+
   final VoidCallback onHomePressed;
   final VoidCallback onAboutPressed;
   final VoidCallback onContactPressed;
@@ -14,7 +16,8 @@ class SidebarMenuUser extends StatelessWidget {
   const SidebarMenuUser({
     Key? key,
     required this.userProfileName,
-    required this.userId, // Initialize user ID in the constructor
+    required this.userEmail, // Initialize user email in the constructor
+    required this.userId,
     required this.onHomePressed,
     required this.onAboutPressed,
     required this.onContactPressed,
@@ -47,7 +50,17 @@ class SidebarMenuUser extends StatelessWidget {
                 ),
                 SizedBox(height: 8),
                 Text(
-                  'User ID: $userId', // Display user ID in the DrawerHeader
+                  'Email: $userEmail',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
+                  ),
+                ),
+                SizedBox(height: 4),
+                Text(
+
+                  'User ID: $userId',
+                   // Display user email in the DrawerHeader
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 16,
