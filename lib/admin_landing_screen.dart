@@ -55,6 +55,16 @@ class AdminLandingScreen extends StatelessWidget {
           Navigator.pop(context); // Close the drawer if needed
           // Add your logic here, such as navigating to the dashboard page
         },
+        onSystemGraphPressed: () {
+          // Implement logic for System Graph button pressed
+          Navigator.pop(context); // Close the drawer if needed
+          // Add your logic here, such as navigating to the system graph page
+        },
+        onSharedDataGraphPressed: () {
+          // Implement logic for Shared Data Graph button pressed
+          Navigator.pop(context); // Close the drawer if needed
+          // Add your logic here, such as navigating to the shared data graph page
+        },
       ),
 
       body: Padding(

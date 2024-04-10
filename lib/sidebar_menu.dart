@@ -10,6 +10,8 @@ class SidebarMenu extends StatelessWidget {
   final VoidCallback onSettingsPressed;
   final VoidCallback onLogoutPressed;
   final VoidCallback onDashboardPressed;
+  final VoidCallback onSystemGraphPressed;
+  final VoidCallback onSharedDataGraphPressed;
 
   const SidebarMenu({
     Key? key,
@@ -21,6 +23,8 @@ class SidebarMenu extends StatelessWidget {
     required this.onSettingsPressed,
     required this.onLogoutPressed,
     required this.onDashboardPressed,
+    required this.onSystemGraphPressed,
+    required this.onSharedDataGraphPressed,
   }) : super(key: key);
 
   @override
@@ -81,6 +85,19 @@ class SidebarMenu extends StatelessWidget {
           ListTile(
             title: Text('Map'),
             onTap: onMapPressed,
+          ),
+          ExpansionTile(
+            title: Text('Graphs'),
+            children: [
+              ListTile(
+                title: Text('System Graph'),
+                onTap: onSystemGraphPressed,
+              ),
+              ListTile(
+                title: Text('Shared Data Graph'),
+                onTap: onSharedDataGraphPressed,
+              ),
+            ],
           ),
           Divider(),
           ListTile(
