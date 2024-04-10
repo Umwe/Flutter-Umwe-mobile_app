@@ -1,14 +1,18 @@
-import 'dart:convert'; // Import dart:convert to use jsonEncode
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'loginPage.dart'; // Import your LoginPage file
 
-
 class SignupPage extends StatelessWidget {
-
+  final TextEditingController fullnamesController = TextEditingController();
   final TextEditingController usernameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  final TextEditingController phonenumberController = TextEditingController();
+
+  // Define gender options
+  final List<String> genderOptions = ['Male', 'Female'];
+  String selectedGender = 'Male'; // Default selected gender
 
   @override
   Widget build(BuildContext context) {
@@ -46,27 +50,45 @@ class SignupPage extends StatelessWidget {
                 Column(
                   children: <Widget>[
                     TextField(
+                      controller: fullnamesController,
+                      decoration: InputDecoration(
+                        hintText: "Full Name",
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(18),
+                          borderSide: BorderSide.none,
+                        ),
+                        fillColor: Colors.purple.withOpacity(0.1),
+                        filled: true,
+                        prefixIcon: const Icon(Icons.person),
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    TextField(
                       controller: usernameController,
                       decoration: InputDecoration(
-                          hintText: "Username",
-                          border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(18),
-                              borderSide: BorderSide.none),
-                          fillColor: Colors.purple.withOpacity(0.1),
-                          filled: true,
-                          prefixIcon: const Icon(Icons.person)),
+                        hintText: "Username",
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(18),
+                          borderSide: BorderSide.none,
+                        ),
+                        fillColor: Colors.purple.withOpacity(0.1),
+                        filled: true,
+                        prefixIcon: const Icon(Icons.person),
+                      ),
                     ),
                     const SizedBox(height: 20),
                     TextField(
                       controller: emailController,
                       decoration: InputDecoration(
-                          hintText: "Email",
-                          border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(18),
-                              borderSide: BorderSide.none),
-                          fillColor: Colors.purple.withOpacity(0.1),
-                          filled: true,
-                          prefixIcon: const Icon(Icons.email)),
+                        hintText: "Email",
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(18),
+                          borderSide: BorderSide.none,
+                        ),
+                        fillColor: Colors.purple.withOpacity(0.1),
+                        filled: true,
+                        prefixIcon: const Icon(Icons.email),
+                      ),
                     ),
                     const SizedBox(height: 20),
                     TextField(
@@ -74,13 +96,51 @@ class SignupPage extends StatelessWidget {
                       decoration: InputDecoration(
                         hintText: "Password",
                         border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(18),
-                            borderSide: BorderSide.none),
+                          borderRadius: BorderRadius.circular(18),
+                          borderSide: BorderSide.none,
+                        ),
                         fillColor: Colors.purple.withOpacity(0.1),
                         filled: true,
                         prefixIcon: const Icon(Icons.password),
                       ),
                       obscureText: true,
+                    ),
+                    const SizedBox(height: 20),
+                    TextField(
+                      controller: phonenumberController,
+                      decoration: InputDecoration(
+                        hintText: "Phone Number",
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(18),
+                          borderSide: BorderSide.none,
+                        ),
+                        fillColor: Colors.purple.withOpacity(0.1),
+                        filled: true,
+                        prefixIcon: const Icon(Icons.phone),
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    DropdownButtonFormField<String>(
+                      value: selectedGender,
+                      onChanged: (value) {
+                        selectedGender = value!;
+                      },
+                      items: genderOptions.map((gender) {
+                        return DropdownMenuItem(
+                          value: gender,
+                          child: Text(gender),
+                        );
+                      }).toList(),
+                      decoration: InputDecoration(
+                        hintText: "Gender",
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(18),
+                          borderSide: BorderSide.none,
+                        ),
+                        filled: true,
+                        fillColor: Colors.purple.withOpacity(0.1),
+                        prefixIcon: const Icon(Icons.person_outline),
+                      ),
                     ),
                   ],
                 ),
@@ -92,9 +152,12 @@ class SignupPage extends StatelessWidget {
 
                       // Convert user data to JSON format
                       var userData = {
+                        "fullnames": fullnamesController.text,
                         "username": usernameController.text,
                         "email": emailController.text,
                         "password": passwordController.text,
+                        "phonenumber": phonenumberController.text,
+                        "gender": selectedGender, // Add selected gender to user data
                         "role": "2", // Default role value
                       };
                       var jsonData = jsonEncode(userData);
@@ -154,8 +217,9 @@ class SignupPage extends StatelessWidget {
                           width: 30.0,
                           decoration: const BoxDecoration(
                             image: DecorationImage(
-                                image: AssetImage('assets/images/login_signup/google.png'),
-                                fit: BoxFit.cover),
+                              image: AssetImage('assets/images/login_signup/google.png'),
+                              fit: BoxFit.cover,
+                            ),
                             shape: BoxShape.circle,
                           ),
                         ),

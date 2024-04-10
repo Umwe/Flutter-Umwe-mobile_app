@@ -6,55 +6,6 @@ import 'UserInfo.dart';
 import 'sidebar_menu.dart'; // Import your SidebarMenu widget
 
 class AdminLandingScreen extends StatelessWidget {
-  // Placeholder callback functions for menu items
-  void onHomePressed(BuildContext context) {
-    // Implement logic for Home button pressed
-    Navigator.pop(context); // Close the drawer if needed
-    // Add your logic here, such as navigating to the home page
-  }
-
-  void onAboutPressed(BuildContext context) {
-    // Implement logic for About button pressed
-    Navigator.pop(context); // Close the drawer if needed
-    // Add your logic here, such as navigating to the about page
-  }
-
-  void onContactPressed(BuildContext context) {
-    // Implement logic for Contact button pressed
-    Navigator.pop(context); // Close the drawer if needed
-    // Add your logic here, such as navigating to the contact page
-  }
-
-  void onGalleryPressed(BuildContext context) {
-    // Implement logic for Gallery button pressed
-    Navigator.pop(context); // Close the drawer if needed
-    // Add your logic here, such as navigating to the gallery page
-  }
-
-  void onMapPressed(BuildContext context) {
-    // Implement logic for Map button pressed
-    Navigator.pop(context); // Close the drawer if needed
-    // Add your logic here, such as navigating to the map page
-  }
-
-  void onSettingsPressed(BuildContext context) {
-    // Implement logic for Settings button pressed
-    Navigator.pop(context); // Close the drawer if needed
-    // Add your logic here, such as navigating to the settings page
-  }
-
-  void onLogoutPressed(BuildContext context) {
-    // Implement logic for Logout button pressed
-    Navigator.pop(context); // Close the drawer if needed
-    // Add your logic here, such as logging out the user
-  }
-
-  void onDashboardPressed(BuildContext context) {
-    // Implement logic for Dashboard button pressed
-    Navigator.pop(context); // Close the drawer if needed
-    // Add your logic here, such as navigating to the dashboard page
-  }
-
   @override
   Widget build(BuildContext context) {
     double buttonSize = MediaQuery.of(context).size.width * 0.45;
@@ -64,15 +15,46 @@ class AdminLandingScreen extends StatelessWidget {
         title: Text('Admin Dashboard'),
       ),
       drawer: SidebarMenu(
-        userProfileName: UserInfo().username ?? 'Admin', // Use UserInfo username or 'Guest' as fallback
-        onHomePressed: () => onHomePressed(context),
-        onAboutPressed: () => onAboutPressed(context),
-        onContactPressed: () => onContactPressed(context),
-        onGalleryPressed: () => onGalleryPressed(context),
-        onMapPressed: () => onMapPressed(context),
-        onSettingsPressed: () => onSettingsPressed(context),
-        onLogoutPressed: () => onLogoutPressed(context),
-        onDashboardPressed: () => onDashboardPressed(context),
+        onHomePressed: () {
+          // Implement logic for Home button pressed
+          Navigator.pop(context); // Close the drawer if needed
+          // Add your logic here, such as navigating to the home page
+        },
+        onAboutPressed: () {
+          // Implement logic for About button pressed
+          Navigator.pop(context); // Close the drawer if needed
+          // Add your logic here, such as navigating to the about page
+        },
+        onContactPressed: () {
+          // Implement logic for Contact button pressed
+          Navigator.pop(context); // Close the drawer if needed
+          // Add your logic here, such as navigating to the contact page
+        },
+        onGalleryPressed: () {
+          // Implement logic for Gallery button pressed
+          Navigator.pop(context); // Close the drawer if needed
+          // Add your logic here, such as navigating to the gallery page
+        },
+        onMapPressed: () {
+          // Implement logic for Map button pressed
+          Navigator.pop(context); // Close the drawer if needed
+          // Add your logic here, such as navigating to the map page
+        },
+        onSettingsPressed: () {
+          // Implement logic for Settings button pressed
+          Navigator.pop(context); // Close the drawer if needed
+          // Add your logic here, such as navigating to the settings page
+        },
+        onLogoutPressed: () {
+          // Implement logic for Logout button pressed
+          Navigator.pushReplacementNamed(context, '/');
+          // Add your logic here, such as logging out the user
+        },
+        onDashboardPressed: () {
+          // Implement logic for Dashboard button pressed
+          Navigator.pop(context); // Close the drawer if needed
+          // Add your logic here, such as navigating to the dashboard page
+        },
       ),
 
       body: Padding(

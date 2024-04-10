@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:mobile_app_project/UserInfo.dart'; // Import UserInfo class
 
 class SidebarMenu extends StatelessWidget {
-  final String userProfileName;
   final VoidCallback onHomePressed;
   final VoidCallback onAboutPressed;
   final VoidCallback onContactPressed;
@@ -13,7 +13,6 @@ class SidebarMenu extends StatelessWidget {
 
   const SidebarMenu({
     Key? key,
-    required this.userProfileName,
     required this.onHomePressed,
     required this.onAboutPressed,
     required this.onContactPressed,
@@ -26,6 +25,9 @@ class SidebarMenu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String fullnames = UserInfo().fullnames ?? 'Full Names'; // Get full names from UserInfo
+    String email = UserInfo().email ?? 'example@example.com'; // Get email from UserInfo
+
     return Drawer(
       child: ListView(
         padding: EdgeInsets.zero,
@@ -34,25 +36,35 @@ class SidebarMenu extends StatelessWidget {
             decoration: BoxDecoration(
               color: Colors.blue,
             ),
-            child: Text(
-              'Welcome, $userProfileName',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 20,
-              ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  fullnames,
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 20,
+                  ),
+                ),
+                SizedBox(height: 5),
+                Text(
+                  email,
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
+                  ),
+                ),
+              ],
             ),
           ),
           ListTile(
             title: Text('Dashboard'),
-            onTap: () {
-              Navigator.pushReplacementNamed(context, '/dashboard');
-            },
+            onTap: onDashboardPressed,
           ),
           ListTile(
             title: Text('Home'),
-            onTap: () {
-              Navigator.pushReplacementNamed(context, '/adminLandingScreen');
-            },
+            onTap: onHomePressed,
           ),
           ListTile(
             title: Text('About'),
@@ -77,9 +89,7 @@ class SidebarMenu extends StatelessWidget {
           ),
           ListTile(
             title: Text('Logout'),
-            onTap: () {
-              Navigator.pushReplacementNamed(context, '/');
-            },
+            onTap: onLogoutPressed,
           ),
         ],
       ),

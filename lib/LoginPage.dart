@@ -17,6 +17,9 @@ class _LoginPageState extends State<LoginPage> {
   bool _isLoading = false; // Track loading state
   String? userId; // Store user ID
   String? username; // Store username
+  String? fullnames; // Store full names
+  String? phoneNumber; // Store phone number
+  String? email; // Store email
 
   Future<void> _login(BuildContext context, String username, String password) async {
     setState(() {
@@ -45,9 +48,12 @@ class _LoginPageState extends State<LoginPage> {
       if (redirectMessage == "Redirect to admin dashboard" || redirectMessage == "Redirect to user dashboard") {
         userId = responseData['user_id'].toString(); // Use 'user_id' key
         username = responseData['username'];
+        fullnames = responseData['fullnames']; // Retrieve full names
+        phoneNumber = responseData['phonenumber']; // Retrieve phone number
+        email = responseData['email']; // Retrieve email
 
         // Set user details using UserInfo singleton
-        UserInfo().setUserDetails(userId!, username!);
+        UserInfo().setUserDetails(userId!, username!, fullnames!, phoneNumber!, email!);
 
         Navigator.pushReplacement(
           context,
@@ -57,7 +63,8 @@ class _LoginPageState extends State<LoginPage> {
                 : UserLandingScreen(),
           ),
         );
-      } else {
+      }
+      else {
         _showErrorDialog("Invalid credentials");
       }
     } else if (response.statusCode == 401) {
