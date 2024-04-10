@@ -10,7 +10,7 @@ class ScoreboardPage extends StatefulWidget {
 class _ScoreboardPageState extends State<ScoreboardPage> {
   Future<List<Map<String, dynamic>>> _fetchScoreboardData() async {
     final response =
-    await http.get(Uri.parse('http://192.168.137.1:8080/scoreboards/listall'));
+    await http.get(Uri.parse('http://192.168.1.65:8080/scoreboards/listall'));
 
     if (response.statusCode == 200) {
       final data = json.decode(response.body);
@@ -81,19 +81,26 @@ class _ScoreboardPageState extends State<ScoreboardPage> {
                     ),
                   ),
                 ],
-                headingRowColor: MaterialStateColor.resolveWith(
-                        (states) => Colors.lightBlue),
+                headingRowColor:
+                MaterialStateColor.resolveWith((states) => Colors.lightBlue),
                 rows: List<DataRow>.generate(
                   scoreboardData.length,
-                      (index) => DataRow(
-                    cells: [
-                      DataCell(Text((index + 1).toString())),
-                      DataCell(Text(scoreboardData[index]['username'])),
-                      DataCell(Text(scoreboardData[index]['quizId'].toString())),
-                      DataCell(Text(scoreboardData[index]['quizName'])),
-                      DataCell(Text(scoreboardData[index]['marks'].toString())),
-                    ],
-                  ),
+                      (index) {
+                    final username = scoreboardData[index]['username'] ?? '';
+                    final quizId = scoreboardData[index]['quizId'] ?? '';
+                    final quizName = scoreboardData[index]['quizName'] ?? '';
+                    final marks = scoreboardData[index]['totalMarksObtained'] ?? '';
+
+                    return DataRow(
+                      cells: [
+                        DataCell(Text((index + 1).toString())),
+                        DataCell(Text(username)),
+                        DataCell(Text(quizId.toString())),
+                        DataCell(Text(quizName)),
+                        DataCell(Text(marks.toString())),
+                      ],
+                    );
+                  },
                 ),
               ),
             );
