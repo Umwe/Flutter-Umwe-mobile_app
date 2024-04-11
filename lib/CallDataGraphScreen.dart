@@ -3,6 +3,8 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:fl_chart/fl_chart.dart';
+import 'package:syncfusion_flutter_charts/charts.dart';
+
 
 class CallData {
   final String date;
@@ -39,6 +41,7 @@ class _CallDataGraphScreenState extends State<CallDataGraphScreen> {
       final response = await http.get(Uri.parse('http://10.152.3.231:8080/calldata/listall'));
       if (response.statusCode == 200) {
         final List<dynamic> responseData = jsonDecode(response.body);
+        print('Fetched data: $responseData');
         setState(() {
           graphData = responseData
               .map((data) => CallData(
@@ -49,30 +52,13 @@ class _CallDataGraphScreenState extends State<CallDataGraphScreen> {
             color: Colors.primaries[Random().nextInt(Colors.primaries.length)],
           ))
               .toList();
-          // Sort graphData based on totalCost in descending order
-          graphData.sort((a, b) => b.totalCost.compareTo(a.totalCost));
         });
       } else {
-        throw Exception('Failed to load data: ${response.statusCode}');
+        throw Exception('Failed to load data');
       }
     } catch (e) {
-      print('Error fetching data: $e');
+      print('Error: $e');
     }
-  }
-
-  void showFullPieChartModal() {
-    showModalBottomSheet(
-      context: context,
-      builder: (_) => Container(
-        height: 400,
-        padding: EdgeInsets.all(20),
-        child: GraphWidget(
-          title: 'Full Pie Chart',
-          graphData: graphData,
-          is3DPieChart: true,
-        ),
-      ),
-    );
   }
 
   @override
@@ -84,13 +70,10 @@ class _CallDataGraphScreenState extends State<CallDataGraphScreen> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            GestureDetector(
-              onTap: showFullPieChartModal,
-              child: GraphWidget(
-                title: 'Top 5 Pie Chart',
-                graphData: graphData.take(5).toList(),
-                is3DPieChart: true,
-              ),
+            GraphWidget(
+              title: 'Pie Chart', // Title for the pie chart grid
+              graphData: graphData,
+              is3DPieChart: true,
             ),
             GraphWidget(title: 'Other Graph 1', graphData: [], is3DPieChart: false),
             GraphWidget(title: 'Other Graph 2', graphData: [], is3DPieChart: false),
