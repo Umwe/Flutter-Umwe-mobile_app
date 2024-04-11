@@ -1,10 +1,12 @@
-import 'dart:convert';
-import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'dart:math';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
-
+import 'package:flutter/services.dart'; // Import the services.dart package
+import 'package:mobile_app_project/UserInfo.dart'; // Import UserInfo class
+import 'sidebar_menu.dart'; // Import SidebarMenu
 
 class CallData {
   final String date;
@@ -54,11 +56,18 @@ class _CallDataGraphScreenState extends State<CallDataGraphScreen> {
               .toList();
         });
       } else {
-        throw Exception('Failed to load data');
+        throw Exception('Failed to load data: ${response.statusCode}');
       }
     } catch (e) {
-      print('Error: $e');
+      print('Error fetching data: $e');
     }
+  }
+
+  Future<void> refreshData() async {
+    setState(() {
+      graphData.clear();
+    });
+    await fetchData();
   }
 
   @override
@@ -66,17 +75,62 @@ class _CallDataGraphScreenState extends State<CallDataGraphScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Call Data Graphs'),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.refresh),
+            onPressed: refreshData,
+          ),
+        ],
+      ),
+      drawer: SidebarMenu(
+        onHomePressed: () {
+          Navigator.pushReplacementNamed(context, '/adminLandingScreen');
+        },
+        onAboutPressed: () {
+          // Implement the functionality for the About button here
+        },
+        onContactPressed: () {
+          // Implement the functionality for the Contact button here
+        },
+        onGalleryPressed: () {
+          // Implement the functionality for the Gallery button here
+        },
+        onMapPressed: () {
+          // Implement the functionality for the Map button here
+        },
+        onSettingsPressed: () {
+          // Implement the functionality for the Settings button here
+        },
+        onLogoutPressed: () {
+          Navigator.pushReplacementNamed(context, '/');
+        },
+        onSystemGraphPressed: () {
+          // Implement the functionality for the System Graph button here
+        },
+        onSharedDataGraphPressed: () {
+          Navigator.pushReplacementNamed(context, '/CallDataGraphScreen');
+          // Implement the functionality for the Shared Data Graph button here
+        },
       ),
       body: SingleChildScrollView(
         child: Column(
           children: [
             GraphWidget(
-              title: 'Pie Chart', // Title for the pie chart grid
+              title: 'Pie Chart',
               graphData: graphData,
               is3DPieChart: true,
             ),
-            GraphWidget(title: 'Other Graph 1', graphData: [], is3DPieChart: false),
-            GraphWidget(title: 'Other Graph 2', graphData: [], is3DPieChart: false),
+            GraphWidget(
+              title: 'Pareto Chart',
+              graphData: graphData,
+              is3DPieChart: false,
+              isParetoChart: true, // Set this flag for Pareto chart
+            ),
+            GraphWidget(
+              title: '3D Clustered Column Chart',
+              graphData: graphData,
+              is3DClusteredColumn: true, // Set this flag for 3D clustered column chart
+            ),
             GraphWidget(title: 'Other Graph 3', graphData: [], is3DPieChart: false),
           ],
         ),
@@ -89,16 +143,24 @@ class GraphWidget extends StatelessWidget {
   final String title;
   final List<CallData> graphData;
   final bool is3DPieChart;
+  final bool isParetoChart;
+  final bool is3DClusteredColumn; // New flag for 3D clustered column chart
 
-  const GraphWidget({Key? key, required this.title, required this.graphData, this.is3DPieChart = false})
-      : super(key: key);
+  const GraphWidget({
+    Key? key,
+    required this.title,
+    required this.graphData,
+    this.is3DPieChart = false,
+    this.isParetoChart = false,
+    this.is3DClusteredColumn = false, // Default to false
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Card(
       margin: EdgeInsets.all(10),
       child: Container(
-        height: MediaQuery.of(context).size.height * 0.425, // Adjust this height as needed
+        height: MediaQuery.of(context).size.height * 0.425,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
@@ -112,10 +174,15 @@ class GraphWidget extends StatelessWidget {
             ),
             Expanded(
               child: Center(
-                child: Column(
+                child: graphData.isEmpty
+                    ? Text(
+                  'No data available',
+                  style: TextStyle(fontSize: 18),
+                )
+                    : Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    if (is3DPieChart && graphData.isNotEmpty)
+                    if (is3DPieChart)
                       Container(
                         height: 350,
                         width: 450,
@@ -134,7 +201,8 @@ class GraphWidget extends StatelessWidget {
                                     ),
                                   ),
                                   borderData: FlBorderData(show: false),
-                                  centerSpaceRadius: 0, // Set this to 0 for a 3D effect without inner free color
+                                  centerSpaceRadius:
+                                  0, // Set this to 0 for a 3D effect without inner free color
                                   sectionsSpace: 0,
                                 ),
                               ),
@@ -171,10 +239,44 @@ class GraphWidget extends StatelessWidget {
                           ],
                         ),
                       ),
-                    if (!is3DPieChart || graphData.isEmpty)
-                      Text(
-                        'No data available',
-                        style: TextStyle(fontSize: 18),
+                    if (isParetoChart)
+                      Container(
+                        height: 350,
+                        child: SfCartesianChart(
+                          primaryXAxis: CategoryAxis(),
+                          primaryYAxis: NumericAxis(),
+                          series: <ChartSeries<CallData, String>>[
+                            ColumnSeries<CallData, String>(
+                              dataSource: graphData,
+                              xValueMapper: (CallData data, _) => data.date,
+                              yValueMapper: (CallData data, _) => data.totalCost,
+                              dataLabelSettings: DataLabelSettings(isVisible: true),
+                            ),
+                            LineSeries<CallData, String>(
+                              dataSource: graphData,
+                              xValueMapper: (CallData data, _) => data.date,
+                              yValueMapper: (CallData data, _) => data.totalCost,
+                            ),
+                          ],
+                        ),
+                      ),
+                    if (is3DClusteredColumn)
+                      Container(
+                        height: 350,
+                        child: SfCartesianChart(
+                          primaryXAxis: CategoryAxis(),
+                          primaryYAxis: NumericAxis(),
+                          series: <ChartSeries<CallData, String>>[
+                            ColumnSeries<CallData, String>(
+                              dataSource: graphData,
+                              xValueMapper: (CallData data, _) => data.date,
+                              yValueMapper: (CallData data, _) => data.totalCost,
+                            ),
+                          ],
+                          plotAreaBorderWidth: 0,
+                          enableMultiSelection: false,
+                          isTransposed: true,
+                        ),
                       ),
                   ],
                 ),
@@ -188,7 +290,10 @@ class GraphWidget extends StatelessWidget {
 }
 
 void main() {
-  runApp(MaterialApp(
-    home: CallDataGraphScreen(),
-  ));
+  WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]).then((_) {
+    runApp(MaterialApp(
+      home: CallDataGraphScreen(),
+    ));
+  });
 }

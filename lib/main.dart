@@ -24,12 +24,13 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute: '/', // Set initial route
       routes: {
-        '/': (context) => CallDataGraphScreen(), // Define LoginPage as the initial route
+        '/': (context) => LoginPage(), // Define LoginPage as the initial route
         '/userLandingScreen': (context) => UserLandingScreen(), // User Landing Screen route
         '/adminLandingScreen': (context) => AdminLandingScreen(), // Admin Landing Screen route
         '/displayQuizForUser': (context) => DisplayQuizForUser(), // Display Quiz For User route
         '/savedAnswersScreen': (context) => SavedAnswersScreen(), // Saved Answers Screen route
         '/dashboard': (context) => DashboardPage(), // Dashboard page route
+        '/CallDataGraphScreen': (context) => CallDataGraphScreen(), //  graph pages
 
       },
     );

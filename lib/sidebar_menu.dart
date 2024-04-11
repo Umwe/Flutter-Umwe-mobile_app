@@ -9,7 +9,6 @@ class SidebarMenu extends StatelessWidget {
   final VoidCallback onMapPressed;
   final VoidCallback onSettingsPressed;
   final VoidCallback onLogoutPressed;
-  final VoidCallback onDashboardPressed;
   final VoidCallback onSystemGraphPressed;
   final VoidCallback onSharedDataGraphPressed;
 
@@ -22,7 +21,6 @@ class SidebarMenu extends StatelessWidget {
     required this.onMapPressed,
     required this.onSettingsPressed,
     required this.onLogoutPressed,
-    required this.onDashboardPressed,
     required this.onSystemGraphPressed,
     required this.onSharedDataGraphPressed,
   }) : super(key: key);
@@ -61,10 +59,6 @@ class SidebarMenu extends StatelessWidget {
                 ),
               ],
             ),
-          ),
-          ListTile(
-            title: Text('Dashboard'),
-            onTap: onDashboardPressed,
           ),
           ListTile(
             title: Text('Home'),
