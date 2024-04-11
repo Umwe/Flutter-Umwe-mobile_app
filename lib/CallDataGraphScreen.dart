@@ -184,8 +184,8 @@ class GraphWidget extends StatelessWidget {
                   children: [
                     if (is3DPieChart)
                       Container(
-                        height: 350,
-                        width: 450,
+                        height: 380,
+                        width: 550,
                         child: Stack(
                           children: [
                             Positioned.fill(
@@ -197,7 +197,7 @@ class GraphWidget extends StatelessWidget {
                                       color: graphData[index].color,
                                       value: graphData[index].totalCost,
                                       title: '', // No need to show title (dates) on segments
-                                      radius: 140, // Adjust the radius to make the pie larger
+                                      radius: 150, // Adjust the radius to make the pie larger
                                     ),
                                   ),
                                   borderData: FlBorderData(show: false),
