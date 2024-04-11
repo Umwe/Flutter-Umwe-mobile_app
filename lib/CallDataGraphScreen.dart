@@ -1,5 +1,7 @@
-import 'dart:math' as math;
+import 'dart:convert';
+import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 import 'package:fl_chart/fl_chart.dart';
 
 class CallData {
@@ -18,7 +20,46 @@ class CallData {
   });
 }
 
-class CallDataGraphScreen extends StatelessWidget {
+class CallDataGraphScreen extends StatefulWidget {
+  @override
+  _CallDataGraphScreenState createState() => _CallDataGraphScreenState();
+}
+
+class _CallDataGraphScreenState extends State<CallDataGraphScreen> {
+  List<CallData> graphData = [];
+
+  @override
+  void initState() {
+    super.initState();
+    fetchData();
+  }
+
+  Future<void> fetchData() async {
+    try {
+      final response = await http.get(Uri.parse('http://10.152.3.231:8080/calldata/listall'));
+      if (response.statusCode == 200) {
+        final List<dynamic> responseData = jsonDecode(response.body);
+        print('Fetched data: $responseData');
+        setState(() {
+          graphData = responseData
+              .map((data) => CallData(
+            date: data['date'],
+            numberOfCalls: data['numberOfCalls'],
+            totalMinutes: data['totalMinutes'],
+            totalCost: data['totalCost'].toDouble(),
+            color: Colors.primaries[Random().nextInt(Colors.primaries.length)],
+          ))
+              .toList();
+        });
+      } else {
+        throw Exception('Failed to load data: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Error fetching data: $e');
+    }
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,18 +71,7 @@ class CallDataGraphScreen extends StatelessWidget {
           children: [
             GraphWidget(
               title: 'Pie Chart', // Title for the pie chart grid
-              graphData: [
-                CallData(date: '2024-04-01', numberOfCalls: 100, totalMinutes: 200, totalCost: 50.0, color: Colors.blue),
-                CallData(date: '2024-04-02', numberOfCalls: 150, totalMinutes: 300, totalCost: 70.0, color: Colors.green),
-                CallData(date: '2024-04-03', numberOfCalls: 120, totalMinutes: 250, totalCost: 60.0, color: Colors.red),
-                CallData(date: '2024-04-04', numberOfCalls: 90, totalMinutes: 180, totalCost: 40.0, color: Colors.orange),
-                CallData(date: '2024-04-05', numberOfCalls: 80, totalMinutes: 160, totalCost: 35.0, color: Colors.purple),
-                CallData(date: '2024-04-06', numberOfCalls: 110, totalMinutes: 220, totalCost: 55.0, color: Colors.yellow),
-                CallData(date: '2024-04-07', numberOfCalls: 95, totalMinutes: 190, totalCost: 45.0, color: Colors.teal),
-                CallData(date: '2024-04-08', numberOfCalls: 130, totalMinutes: 260, totalCost: 65.0, color: Colors.indigo),
-                CallData(date: '2024-04-09', numberOfCalls: 85, totalMinutes: 170, totalCost: 37.0, color: Colors.cyan),
-                CallData(date: '2024-04-10', numberOfCalls: 125, totalMinutes: 250, totalCost: 62.0, color: Colors.deepOrange),
-              ],
+              graphData: graphData,
               is3DPieChart: true,
             ),
             GraphWidget(title: 'Other Graph 1', graphData: [], is3DPieChart: false),
