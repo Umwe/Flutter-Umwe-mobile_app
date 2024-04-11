@@ -10,7 +10,7 @@ class ScoreboardPage extends StatefulWidget {
 class _ScoreboardPageState extends State<ScoreboardPage> {
   Future<List<Map<String, dynamic>>> _fetchScoreboardData() async {
     final response =
-    await http.get(Uri.parse('http://192.168.1.65:8080/scoreboards/listall'));
+    await http.get(Uri.parse('http://10.152.3.231:8080/scoreboards/listall'));
 
     if (response.statusCode == 200) {
       final data = json.decode(response.body);
