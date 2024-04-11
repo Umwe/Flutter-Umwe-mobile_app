@@ -5,7 +5,6 @@ import 'DisplayQuizForUser.dart';
 import 'LoginPage.dart';
 import 'admin_landing_screen.dart';
 import 'SavedAnswersScreen.dart';
-import 'dashboard.dart';
 
 void main() {
   runApp(const MyApp());
@@ -29,7 +28,6 @@ class MyApp extends StatelessWidget {
         '/adminLandingScreen': (context) => AdminLandingScreen(), // Admin Landing Screen route
         '/displayQuizForUser': (context) => DisplayQuizForUser(), // Display Quiz For User route
         '/savedAnswersScreen': (context) => SavedAnswersScreen(), // Saved Answers Screen route
-        '/dashboard': (context) => DashboardPage(), // Dashboard page route
         '/CallDataGraphScreen': (context) => CallDataGraphScreen(), //  graph pages
 
       },
