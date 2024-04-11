@@ -3,6 +3,7 @@ import 'package:mobile_app_project/user_landing_screen.dart';
 import 'CallDataGraphScreen.dart';
 import 'DisplayQuizForUser.dart';
 import 'LoginPage.dart';
+import 'MapPage.dart';
 import 'admin_landing_screen.dart';
 import 'SavedAnswersScreen.dart';
 
@@ -23,7 +24,7 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute: '/', // Set initial route
       routes: {
-        '/': (context) => LoginPage(), // Define LoginPage as the initial route
+        '/': (context) => MapPage(), // Define LoginPage as the initial route
         '/userLandingScreen': (context) => UserLandingScreen(), // User Landing Screen route
         '/adminLandingScreen': (context) => AdminLandingScreen(), // Admin Landing Screen route
         '/displayQuizForUser': (context) => DisplayQuizForUser(), // Display Quiz For User route
