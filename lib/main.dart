@@ -24,7 +24,7 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute: '/', // Set initial route
       routes: {
-        '/': (context) => MapPage(), // Define LoginPage as the initial route
+        '/': (context) => LoginPage(), // Define LoginPage as the initial route
         '/userLandingScreen': (context) => UserLandingScreen(), // User Landing Screen route
         '/adminLandingScreen': (context) => AdminLandingScreen(), // Admin Landing Screen route
         '/displayQuizForUser': (context) => DisplayQuizForUser(), // Display Quiz For User route
