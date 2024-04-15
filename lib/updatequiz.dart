@@ -89,9 +89,8 @@ class _DisplayQuizzesScreenState extends State<DisplayQuizzesScreen> {
         builder: (context) => UpdateQuizScreen(quizData: quizData),
       ),
     ).then((value) {
-      if (value != null && value) {
-        fetchQuizzes(); // Refresh the quiz list after updating
-      }
+      // Refresh the quiz list after returning from the update screen
+      fetchQuizzes();
     });
   }
 
@@ -181,14 +180,13 @@ class _UpdateQuizScreenState extends State<UpdateQuizScreen> {
     super.dispose();
   }
 
-  void updateQuizData() {
-    // Implement your update logic here
-    // You can use quizNameController.text and totalMarksController.text to get updated values
-    // Send the updated data to your API endpoint
-
-    // For example, if you want to simulate a successful update, you can use:
-    // Navigator.of(context).pop(true);
-    // This will return true to the previous screen, indicating a successful update.
+  void updateQuizData() async {
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (context) => DisplayQuizzesScreen(),
+      ),
+    );
   }
 
   @override

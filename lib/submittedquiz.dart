@@ -34,7 +34,7 @@ class _SubmittedQuizScreenState extends State<SubmittedQuizScreen> {
   }
 
   Future<void> fetchQuizTotalMarks() async {
-    final Uri url = Uri.parse('http://10.152.3.231:8080/quiz/totalMarks/${widget.quizId}');
+    final Uri url = Uri.parse('http://192.168.220.102:8080/quiz/totalMarks/${widget.quizId}');
     final response = await http.get(url);
 
     if (response.statusCode == 200) {
@@ -53,7 +53,7 @@ class _SubmittedQuizScreenState extends State<SubmittedQuizScreen> {
   }
 
   Future<void> saveMarks() async {
-    final Uri saveUrl = Uri.parse('http://10.152.3.231:8080/scoreboards/save');
+    final Uri saveUrl = Uri.parse('http://192.168.220.102:8080/scoreboards/save');
     final Map<String, dynamic> postData = {
       "quizId": widget.quizId,
       "quizName": widget.quizName,
@@ -133,13 +133,7 @@ class _SubmittedQuizScreenState extends State<SubmittedQuizScreen> {
               style: TextStyle(fontSize: 48, fontWeight: FontWeight.bold),
             ),
             SizedBox(height: 24),
-            ElevatedButton(
-              onPressed: () {
-                viewAnswers(); // Call the function to view answers when the button is pressed
-              },
-              child: Text('View Answers'),
-            ),
-            SizedBox(height: 16),
+
             ElevatedButton(
               onPressed: () async {
                 await saveMarks(); // Call the save function when the button is pressed

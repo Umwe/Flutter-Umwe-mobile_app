@@ -25,7 +25,7 @@ class _TakeQuizScreenState extends State<TakeQuizScreen> {
   }
 
   Future<void> fetchQuestions() async {
-    final Uri url = Uri.parse('http://10.152.3.231:8080/question/listbyquiz/${widget.quizId}');
+    final Uri url = Uri.parse('http://192.168.220.102:8080/question/listbyquiz/${widget.quizId}');
     final response = await http.get(url);
 
     if (response.statusCode == 200) {
@@ -54,7 +54,7 @@ class _TakeQuizScreenState extends State<TakeQuizScreen> {
 
   Future<void> fetchAnswersForQuestions() async {
     for (var question in questions) {
-      final Uri answerUrl = Uri.parse('http://10.152.3.231:8080/answer/listbyquestion/${question.questionId}');
+      final Uri answerUrl = Uri.parse('http://192.168.220.102:8080/answer/listbyquestion/${question.questionId}');
       final answerResponse = await http.get(answerUrl);
 
       if (answerResponse.statusCode == 200) {

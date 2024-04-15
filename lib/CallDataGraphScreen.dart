@@ -40,7 +40,7 @@ class _CallDataGraphScreenState extends State<CallDataGraphScreen> {
 
   Future<void> fetchData() async {
     try {
-      final response = await http.get(Uri.parse('http://10.152.3.231:8080/calldata/listall'));
+      final response = await http.get(Uri.parse('http://192.168.220.102:8080/calldata/listall'));
       if (response.statusCode == 200) {
         final List<dynamic> responseData = jsonDecode(response.body);
         print('Fetched data: $responseData');
@@ -131,7 +131,9 @@ class _CallDataGraphScreenState extends State<CallDataGraphScreen> {
               graphData: graphData,
               is3DClusteredColumn: true, // Set this flag for 3D clustered column chart
             ),
-            GraphWidget(title: 'Other Graph 3', graphData: [], is3DPieChart: false),
+            GraphWidget(title: 'Other Graph 3',
+                graphData: [],
+                is3DPieChart: false),
           ],
         ),
       ),

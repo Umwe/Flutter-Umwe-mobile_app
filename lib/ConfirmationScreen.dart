@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'CreateQuestionScreen.dart';
 import 'CreateQuizScreen.dart'; // Import the screen where quiz data is entered
+import 'DisplayQuizzesScreen.dart'; // Import the screen where quizzes are displayed
 
 class ConfirmationScreen extends StatelessWidget {
   final String quizName;
@@ -45,14 +46,16 @@ class ConfirmationScreen extends StatelessWidget {
                   ),
                 );
               },
-              child: Text('Create another  Question'),
+              child: Text('Create another Question'),
             ),
             ElevatedButton(
               onPressed: () {
-                // Navigate to landing page or any other screen as needed
-                Navigator.popUntil(
+                // Navigate to DisplayQuizzesScreen to save quiz
+                Navigator.pushReplacement(
                   context,
-                  ModalRoute.withName(Navigator.defaultRouteName),
+                  MaterialPageRoute(
+                    builder: (context) => DisplayQuizzesScreen(),
+                  ),
                 );
               },
               child: Text('Save Quiz'),

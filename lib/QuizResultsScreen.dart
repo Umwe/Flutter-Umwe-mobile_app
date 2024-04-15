@@ -18,7 +18,7 @@ class _QuizResultsScreenState extends State<QuizResultsScreen> {
     try {
       String userId = userInfo.userId ?? '';
       if (userId.isNotEmpty) {
-        final response = await http.get(Uri.parse('http://10.152.3.231:8080/scoreboards/listbyuser/$userId'));
+        final response = await http.get(Uri.parse('http://192.168.220.102:8080/scoreboards/listbyuser/$userId'));
         if (response.statusCode == 200) {
           List<dynamic> data = json.decode(response.body);
           setState(() {

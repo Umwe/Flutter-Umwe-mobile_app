@@ -81,7 +81,7 @@ class _CreateQuestionScreenState extends State<CreateQuestionScreen> {
       };
 
       final response = await http.post(
-        Uri.parse('http://10.152.3.231:8080/question/save'),
+        Uri.parse('http://192.168.220.102:8080/question/save'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },

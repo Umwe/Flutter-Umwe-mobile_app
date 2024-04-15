@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:mobile_app_project/step_counter.dart';
+import 'package:mobile_app_project/updatequiz.dart';
 import 'package:mobile_app_project/user_landing_screen.dart';
 import 'CallDataGraphScreen.dart';
 import 'DisplayQuizForUser.dart';
@@ -6,6 +8,7 @@ import 'LoginPage.dart';
 import 'MapPage.dart';
 import 'admin_landing_screen.dart';
 import 'SavedAnswersScreen.dart';
+import 'compass_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -25,7 +28,7 @@ class MyApp extends StatelessWidget {
       initialRoute: '/', // Set initial route
       routes: {
         '/': (context) => LoginPage(), // Define LoginPage as the initial route
-        '/userLandingScreen': (context) => UserLandingScreen(), // User Landing Screen route
+        '/UserLandingScreen': (context) => UserLandingScreen(), // User Landing Screen route
         '/adminLandingScreen': (context) => AdminLandingScreen(), // Admin Landing Screen route
         '/displayQuizForUser': (context) => DisplayQuizForUser(), // Display Quiz For User route
         '/savedAnswersScreen': (context) => SavedAnswersScreen(), // Saved Answers Screen route
